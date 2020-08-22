@@ -12,14 +12,14 @@
         android:id="@+id/sign_in_activity_image"
         android:layout_width="830dp"
         android:layout_height="800dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/signin_background_image"
         android:scaleType="fitStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <TextView
         android:id="@+id/sign_in_activity_title"
@@ -40,16 +40,16 @@
         android:id="@+id/sign_in_activity_google_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:background="@color/transparent"
         android:drawableStart="@drawable/ic_google_48dp"
-        android:text="  SIGN IN WITH GOOLE "
+        android:drawablePadding="10dp"
+        android:text="SIGN IN WITH GOOLE"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_activity_mail_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="10dp"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/sign_in_activity_mail_button"
@@ -57,7 +57,9 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:drawableStart="@drawable/ic_mail_40dp"
-        android:text="   SIGN IN WITH EMAIL "
+        android:drawablePadding="10dp"
+        android:text="SIGN IN WITH EMAIL"
+        android:textStyle="bold"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/sign_in_activity_google_button"

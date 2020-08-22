@@ -1,13 +1,13 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- FireBase Sign-in activity -->    <style name="firebaseTheme" parent="FirebaseUI">
+    <!-- FireBase Sign-in activity -->
+    <style name="firebaseTheme" parent="FirebaseUI">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -34,5 +34,8 @@
     <style name="FirebaseUI.Text.Link">
         <item name="android:textColor">@color/green</item>
     </style>
+    
+
+
 
 </resources>
