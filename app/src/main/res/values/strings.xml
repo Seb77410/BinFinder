@@ -3,10 +3,14 @@
 
     <string name="app_name">BinFinder</string>
 
+    <string name="google_maps_key" translatable="false">AIzaSyDvb7BaoarKGzOumvtqrrKaqxP7D9w6-WE</string>
+
 
     <!-- Sign in Activity -->
     <string name="sign_in_activity_title">Let\'s keep our Earth clean</string>
     <string name="sign_in_with_google">SIGN IN WITH GOOGLE</string>
     <string name="sign_in_with_email">SIGN IN WITH EMAIL</string>
     <string name="sign_in_skip">SKIP</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

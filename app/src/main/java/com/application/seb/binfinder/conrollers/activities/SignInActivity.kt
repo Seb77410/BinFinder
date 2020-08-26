@@ -1,10 +1,11 @@
-package com.application.seb.binfinder
+package com.application.seb.binfinder.conrollers.activities
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.application.seb.binfinder.R
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
@@ -75,8 +76,6 @@ class SignInActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
             // ERRORS
             if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
                 // Start MainActivity
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
