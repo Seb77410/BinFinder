@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -44,7 +45,7 @@ class BinRepository {
 //--------------------------------------------------------------------------------------------------
 // Get
 //--------------------------------------------------------------------------------------------------
-    fun getBin(){
-        //binCollection().get()
+    fun getBinByType(type : String): Task<QuerySnapshot> {
+        return binCollection()!!.whereEqualTo("type", type ).get()
     }
 }

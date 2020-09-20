@@ -27,7 +27,6 @@ class MapFragmentTest {
         intentsTestRule.activity.supportFragmentManager.beginTransaction().add(R.id.activity_main_frameLayout, fragment).commit()
 
         // Base view
-        Espresso.onView(ViewMatchers.withId(R.id.fragment_map)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.map_fragment_constraint_layout)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.map)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(ViewMatchers.withId(R.id.map_fragment_fab_container)).check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())))
