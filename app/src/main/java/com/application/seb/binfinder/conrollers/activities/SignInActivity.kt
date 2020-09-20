@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.application.seb.binfinder.R
+import com.application.seb.binfinder.repositories.UserRepository
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 
-
 const val RC_SIGN_IN = 1
-
 
     //----------------------------------------------------------------------------------------------
     // On Create
@@ -76,9 +75,7 @@ class SignInActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
             // ERRORS
             if (resultCode == Activity.RESULT_OK) {
-                // Start MainActivity
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                startActivity(intent)
+                createUser()
             } else when {
                 response == null -> {
                     Log.e("SignIn activity", "Error : Auth cancel")
@@ -98,6 +95,39 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
+//----------------------------------------------------------------------------------------------
+// Create User
+//----------------------------------------------------------------------------------------------
 
+    private fun createUser(){
+        val userRepository = UserRepository()
+        userRepository.getUser(FirebaseAuth.getInstance().currentUser!!.uid)!!
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        if (document == null) {Log.e("SignIn", "User document is NULL")}
+                        else {Log.d("SignIn", "User document is NOT NULL")
+                            if (document.exists()) {
+                                startMainActivity()
+                                Log.d("SignIn", "User document already exist")
+                            }
+                            else {
+                                userRepository
+                                        .createUser(FirebaseAuth.getInstance().currentUser!!.uid,
+                                            FirebaseAuth.getInstance().currentUser!!.displayName!!,
+                                            FirebaseAuth.getInstance().currentUser?.photoUrl )!!
+                                        .addOnSuccessListener {startMainActivity()}
+                                Log.d("SignIn", "User CREATE")
+                            }
+                        }
+                    }
+                    else {Log.e("SignIn", "User NOT CREATE")}
+                }
+    }
+
+    private fun startMainActivity(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
+    }
 }
 
