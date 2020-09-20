@@ -26,7 +26,7 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signin)
 
         if (FirebaseAuth.getInstance().currentUser != null) {
-            Log.e("SignIn", FirebaseAuth.getInstance().currentUser.toString())
+            Log.d("SignIn", FirebaseAuth.getInstance().currentUser.toString())
             val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
         } else {

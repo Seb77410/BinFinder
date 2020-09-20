@@ -39,19 +39,26 @@ dependencies {
     // Firebase Auth
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     // FireStore
-    implementation 'com.google.firebase:firebase-firestore:21.5.0'
+    implementation 'com.google.firebase:firebase-firestore:21.6.0'
+    implementation 'com.google.firebase:firebase-core:17.5.0'
+
+    // Cloud storage
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
     // Map SDK
     implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
 
     // Tests
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

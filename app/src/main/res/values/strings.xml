@@ -1,16 +1,37 @@
 <resources>
 
-
+    <!-- Values -->
     <string name="app_name">BinFinder</string>
-
     <string name="google_maps_key" translatable="false">AIzaSyDvb7BaoarKGzOumvtqrrKaqxP7D9w6-WE</string>
 
-
     <!-- Sign in Activity -->
-    <string name="sign_in_activity_title">Let\'s keep our Earth clean</string>
+    <string name="sign_in_activity_title">Let\'s keep our Earth \nclean</string>
     <string name="sign_in_with_google">SIGN IN WITH GOOGLE</string>
     <string name="sign_in_with_email">SIGN IN WITH EMAIL</string>
     <string name="sign_in_skip">SKIP</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="sign_in_base_image_description">sign_in_base_image</string>
+
+
+    <!-- Alert dialog -->
+    <string name="alert_dialog_add_bin_title">Add bin place</string>
+    <string name="alert_dialog_add_bin_content">Are you sure you want to add a bin on your location ?</string>
+    <string name="alert_dialog_yes_button">Yes</string>
+    <string name="alert_dialog_no_button">No</string>
+    <string name="alert_dialog_no_photo_title">Add photo</string>
+    <string name="alert_dialog_no_photo_content">No photo added. You have to take one photo in order to save location</string>
+    <string name="alert_dialog_save_location_title">Save location</string>
+    <string name="alert_dialog_save_location_content">By confirming data, the location will be permanently saved and can no longer be modified.</string>
+    <string name="alert_dialog_ok_button">ok</string>
+
+    <!-- Add bin fragment -->
+    <string name="add_bin_fragment_photo_container">add_bin_frag_photo_container</string>
+    <string name="type">"Type : "</string>
+    <string name="household_wast">Household wast</string>
+    <string name="plastic">Plastic</string>
+    <string name="glass">Glass</string>
+    <string name="green_waste">Green waste</string>
+    <string name="wild_deposit">Wild deposit</string>
+    <string name="recycling_center">Recycling center</string>
+
 </resources>

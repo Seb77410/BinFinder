@@ -2,18 +2,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_map"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_fragment_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
         />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,8 +26,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_filter_black_48dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginBottom="35dp"
+            android:rotation="90"
             />
 
         <LinearLayout
@@ -35,7 +38,9 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/map_fragment_fab_menu"
             app:layout_constraintEnd_toEndOf="@+id/map_fragment_fab_menu"
-            app:layout_constraintStart_toStartOf="@+id/map_fragment_fab_menu">
+            app:layout_constraintStart_toStartOf="@+id/map_fragment_fab_menu"
+            android:visibility="gone"
+            >
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/map_fragment_fab_glass"
@@ -92,6 +97,18 @@
                 app:fabCustomSize="45dp"
                 app:srcCompat="@drawable/ic_landfill" />
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/map_fragment_fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/map_fragment_fab_container"
+            app:layout_constraintEnd_toEndOf="@+id/map_fragment_fab_menu"
+            app:layout_constraintStart_toStartOf="@+id/map_fragment_fab_menu"
+            app:srcCompat="@drawable/ic_add_black_24"
+            android:layout_marginBottom="10dp"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

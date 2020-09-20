@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".conrollers.fragments.AddBinFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_bin_fragment_constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/add_bin_fragment_cardView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintBottom_toTopOf="@+id/add_bin_fragment_guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <ImageButton
+                android:id="@+id/add_bin_fragment_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/add_photo"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/add_bin_fragment_photo_container" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/add_bin_fragment_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="300dp"
+            />
+
+        <TextView
+            android:id="@+id/add_bin_fragment_type_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/type"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_bin_fragment_guideline" />
+
+        <RadioGroup
+            android:id="@+id/add_bin_fragment_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/add_bin_fragment_type_title"
+            app:layout_constraintTop_toBottomOf="@+id/add_bin_fragment_type_title"
+            android:layout_marginStart="20dp"
+            android:checkedButton="@+id/add_bin_fragment_radioButton_household_waste"
+
+            >
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_household_waste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/household_wast" />
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_plastic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plastic" />
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_glass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/glass" />
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_green_waste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/green_waste" />
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_wild_deposit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wild_deposit" />
+
+            <RadioButton
+                android:id="@+id/add_bin_fragment_radioButton_recycling_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recycling_center" />
+
+
+        </RadioGroup>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_bin_fragment_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_save"
+            app:backgroundTint="@color/colorPrimary"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
