@@ -28,7 +28,7 @@
             android:required="false" />
 
         <!-- activities -->
-        <activity android:name="com.application.seb.binfinder.conrollers.activities.MainActivity"></activity>
+        <activity android:name="com.application.seb.binfinder.conrollers.activities.MainActivity"/>
         <activity android:name="com.application.seb.binfinder.conrollers.activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
