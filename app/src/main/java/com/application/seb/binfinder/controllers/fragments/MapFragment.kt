@@ -1,7 +1,8 @@
-package com.application.seb.binfinder.conrollers.fragments
+package com.application.seb.binfinder.controllers.fragments
 
 import android.Manifest
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -16,6 +17,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
+import com.application.seb.binfinder.controllers.activities.BinDetailsActivity
+import com.application.seb.binfinder.models.Bin
+import com.application.seb.binfinder.repositories.BinRepository
+import com.application.seb.binfinder.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,13 +28,17 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.GeoPoint
 import java.util.*
 
 private const val LOCATION_PERMISSION_CODE = 1
+private const val TAG = "MapFragment"
+private const val PARAM = "binType"
 
-
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
 
 //--------------------------------------------------------------------------------------------------
@@ -43,16 +52,31 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fabGreen: FloatingActionButton
     private lateinit var fabPlastic: FloatingActionButton
     private lateinit var fabRecyclingCenter: FloatingActionButton
-    private lateinit var fabLandfill: FloatingActionButton
+    private lateinit var fabWildDeposit: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var fabContainer : LinearLayout
     private lateinit var constraintLayout : ConstraintLayout
-    private lateinit var userLocation : LatLng
+    private lateinit var userLocation : GeoPoint
+    private var locationsList : MutableList<Bin>? = mutableListOf()
+    private var markersList : MutableList<Marker>? = mutableListOf()
+
 
     interface OnFragmentInteractionListener {
-        fun onFragmentSetUserLocation(userLocation: LatLng?)
+        fun onFragmentSetUserLocation(userLocation: GeoPoint)
     }
 
+//--------------------------------------------------------------------------------------------------
+// Constructor
+//--------------------------------------------------------------------------------------------------
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String?) =
+                MapFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(PARAM, param1)
+                    }
+                }
+    }
 
 //--------------------------------------------------------------------------------------------------
 // On Create
@@ -67,7 +91,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         fabGreen = rootView.findViewById(R.id.map_fragment_fab_green_waste)
         fabPlastic = rootView.findViewById(R.id.map_fragment_fab_plastic)
         fabRecyclingCenter = rootView.findViewById(R.id.map_fragment_fab_recycling_center)
-        fabLandfill = rootView.findViewById(R.id.map_fragment_fab_landfill)
+        fabWildDeposit = rootView.findViewById(R.id.map_fragment_fab_wild_deposit)
         fabContainer = rootView.findViewById(R.id.map_fragment_fab_container)
         fabAdd = rootView.findViewById(R.id.map_fragment_fab_add)
         constraintLayout = rootView.findViewById(R.id.map_fragment_constraint_layout)
@@ -77,10 +101,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         syncMap()
         configureFabMenu()
         configureFabAdd()
+        configureBinsFabClick()
 
         return rootView
     }
-
 
 //--------------------------------------------------------------------------------------------------
 // Synchronise map with fragment
@@ -98,48 +122,51 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 // OnMapReady
 //--------------------------------------------------------------------------------------------------
     override fun onMapReady(p0: GoogleMap?) {
-        Log.d("MapFragment", "OnMapReady")
+        Log.d(TAG, "OnMapReady")
         googleMap = p0
 
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Ask for location permission
-            Log.e("MapFragment", "Location Permission denied")
+            Log.e(TAG, "Location Permission denied")
             return requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_CODE)
 
         }
         else{
-            Log.d("MapFragment", "Location Permission allowed")
+            Log.d(TAG, "Location Permission allowed")
             googleMap!!.isMyLocationEnabled = true
             googleMap!!.uiSettings.isZoomControlsEnabled = true
-            updateUserLocation(false)
+            googleMap!!.setOnMarkerClickListener(this)
+
+            updateUserLocation(toStartAddBinFragment = false, toInitialiseView = true)
         }
     }
 
 //--------------------------------------------------------------------------------------------------
 // Get User location
 //--------------------------------------------------------------------------------------------------
-    private fun updateUserLocation(toStartAddBinFragment: Boolean) {
+    private fun updateUserLocation(toStartAddBinFragment: Boolean, toInitialiseView: Boolean) {
 
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationProviderClient!!.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
-                            Log.d("User Location ", location.latitude.toString() + " , " + location.longitude)
+
+                            Log.d(TAG, "User Location = " + location.latitude.toString() + " , " + location.longitude)
                             // Send user location to MainActivity
-                            userLocation = LatLng(location.latitude, location.longitude)
+                            userLocation = GeoPoint(location.latitude, location.longitude)
                             // Move camera to current position
-                            googleMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12f))
+                            googleMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 12f))
                             if(toStartAddBinFragment){
                                 (Objects.requireNonNull(activity) as OnFragmentInteractionListener).onFragmentSetUserLocation(userLocation)
-
                             }
+                            if (toInitialiseView){showSavedLocation() }
+
                         }
                     }
             return
         }
     }
-
 
 
 //--------------------------------------------------------------------------------------------------
@@ -151,13 +178,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if(requestCode == LOCATION_PERMISSION_CODE){
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("MapFragment", "Location permission granted" )
+                    Log.d(TAG, "Location permission granted")
                     googleMap!!.isMyLocationEnabled = true
                     googleMap!!.uiSettings.isZoomControlsEnabled = true
-                    updateUserLocation(false)
+                    googleMap!!.setOnMarkerClickListener(this)
+
+                    updateUserLocation(toStartAddBinFragment = false, toInitialiseView = true)
                 }
                 else{
-                    Log.e("MapFragment", "Location permission denied" )
+                    Log.e(TAG, "Location permission denied")
                 }
             }
         }
@@ -169,17 +198,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //--------------------------------------------------------------------------------------------------
 
     private fun showAlertDialog(){
-        updateUserLocation(false)
+        updateUserLocation(toStartAddBinFragment = false, toInitialiseView = false)
         val dialogBuilder = AlertDialog.Builder(context!!)
         dialogBuilder
                 .setTitle(getString(R.string.alert_dialog_add_bin_title))
                 .setMessage(getString(R.string.alert_dialog_add_bin_content))
                 .setPositiveButton(getString(R.string.alert_dialog_yes_button)) { _: DialogInterface, _: Int ->
-                    Log.d("MapFragment", "Alert dialog - click YES button")
-                    updateUserLocation(true)
+                    Log.d(TAG, "Alert dialog - click YES button")
+                    updateUserLocation(toStartAddBinFragment = true, toInitialiseView = false)
                 }
                 .setNegativeButton(getString(R.string.alert_dialog_no_button)) { _: DialogInterface, _: Int ->
-                    Log.e("MapFragment", "Alert dialog - click NO button")
+                    Log.e(TAG, "Alert dialog - click NO button")
                 }
         val dialogCard: AlertDialog = dialogBuilder.create()
         dialogCard.window!!.setGravity(Gravity.TOP)
@@ -205,19 +234,85 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun configureFabAdd(){
-        fabAdd.setOnClickListener {
-            showAlertDialog()
+        fabAdd.setOnClickListener {showAlertDialog()}
+    }
+
+    private fun configureBinsFabClick(){
+        fabGlass.setOnClickListener {getSelectedBinsList(getString(R.string.glass))}
+        fabGreen.setOnClickListener {getSelectedBinsList(getString(R.string.green_waste))}
+        fabHousehold.setOnClickListener {getSelectedBinsList(getString(R.string.household_wast))}
+        fabPlastic.setOnClickListener {getSelectedBinsList(getString(R.string.recycling_bin))}
+        fabWildDeposit.setOnClickListener {getSelectedBinsList(getString(R.string.wild_deposit))}
+        fabRecyclingCenter.setOnClickListener {getSelectedBinsList(getString(R.string.recycling_center))}
+    }
+
+//--------------------------------------------------------------------------------------------------
+// Marker
+//--------------------------------------------------------------------------------------------------
+
+    private fun getSelectedBinsList(type: String){
+        val binRepository = BinRepository()
+
+        binRepository.getBinByDistance(userLocation.latitude, userLocation.longitude ,type).addSnapshotListener { _, mutableList, mutableList2 ->
+            Log.e(TAG, "Bins found = ${mutableList.size} and list2 = ${mutableList2.size} for type = $type")
+            // Clear data
+            locationsList!!.clear()
+            removeAllMarker()
+            // Add marker for asked bins
+            for (document in mutableList){
+                val bin = document.toObject(Bin::class.java)
+                bin!!.binId = document.id
+                locationsList!!.add(bin)
+                showMarker()
+                }
+            }
+
+    }
+    private fun showMarker(){
+        for(bin in locationsList!!){
+            // Set marker options
+            val latLng = LatLng(bin.geoLocation!!.latitude ,bin.geoLocation!!.longitude)
+            val markerOptions = MarkerOptions().position(latLng)
+            val mMarker: Marker = googleMap!!.addMarker(markerOptions)
+            mMarker.tag = bin.binId
+            markersList!!.add(mMarker)
+            Log.e(TAG, "Bin id = " + bin.binId)
         }
     }
 
-//--------------------------------------------------------------------------------------------------
-// Show marker
-//--------------------------------------------------------------------------------------------------
-
-    fun showMarker(type : String){
-
-
-
+    private fun removeAllMarker(){
+        for(marker in markersList!!){marker.remove()}
+        markersList!!.clear()
     }
 
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        Log.e(TAG, "marker tag = " + p0!!.tag.toString())
+        if (p0.tag != null) {
+            // Set marker place Id into string value
+            val intent = Intent(activity, BinDetailsActivity::class.java)
+            intent.putExtra(Constants.BIN_ID , p0.tag.toString())
+            startActivity(intent)
+        }
+        return true
+    }
+
+
+//--------------------------------------------------------------------------------------------------
+// Default view
+//--------------------------------------------------------------------------------------------------
+
+    private fun showSavedLocation(){
+        val binType = getArgs()
+        if(!binType.isNullOrEmpty()){getSelectedBinsList(binType)}
+        else{getSelectedBinsList(getString(R.string.household_wast))}
+    }
+
+    private fun getArgs():String?{
+    var binType : String? = null
+        arguments?.let {
+            binType = it.getString(PARAM)
+            Log.d(TAG, " Argument $PARAM = $binType")
+        }
+        return binType
+    }
 }

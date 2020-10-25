@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.conrollers.activities
+package com.application.seb.binfinder.controllers.activities
 
 import android.app.Activity
 import android.content.Intent

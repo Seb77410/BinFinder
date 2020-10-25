@@ -9,9 +9,7 @@
     <string name="sign_in_with_google">SIGN IN WITH GOOGLE</string>
     <string name="sign_in_with_email">SIGN IN WITH EMAIL</string>
     <string name="sign_in_skip">SKIP</string>
-
     <string name="sign_in_base_image_description">sign_in_base_image</string>
-
 
     <!-- Alert dialog -->
     <string name="alert_dialog_add_bin_title">Add bin place</string>
@@ -28,10 +26,20 @@
     <string name="add_bin_fragment_photo_container">add_bin_frag_photo_container</string>
     <string name="type">"Type : "</string>
     <string name="household_wast">Household wast</string>
-    <string name="plastic">Plastic</string>
+    <string name="recycling_bin">Recycling bin</string>
     <string name="glass">Glass</string>
     <string name="green_waste">Green waste</string>
     <string name="wild_deposit">Wild deposit</string>
     <string name="recycling_center">Recycling center</string>
+
+    <!-- Bins Details Activity values -->
+    <string name="coordinates">Coordinates</string>
+    <string name="address">Address</string>
+    <string name="authorized_wastes">Authorized wastes</string>
+    <string name="bin_comment">Comment</string>
+
+    <!-- Notifications -->
+    <string name="notification_title_bin_save">Bin saved</string>
+    <string name="notification_content_bin_save">The bin as been correctly saved</string>
 
 </resources>

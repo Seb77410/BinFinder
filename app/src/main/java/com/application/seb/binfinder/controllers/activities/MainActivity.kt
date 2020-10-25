@@ -1,15 +1,15 @@
-package com.application.seb.binfinder.conrollers.activities
+package com.application.seb.binfinder.controllers.activities
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.application.seb.binfinder.conrollers.fragments.MapFragment
+import com.application.seb.binfinder.controllers.fragments.MapFragment
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.conrollers.fragments.AddBinFragment
-import com.application.seb.binfinder.utils.Converters
-import com.google.android.gms.maps.model.LatLng
+import com.application.seb.binfinder.controllers.fragments.AddBinFragment
+import com.application.seb.binfinder.utils.Utils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.GeoPoint
 
 //--------------------------------------------------------------------------------------------------
 // For data
@@ -20,7 +20,7 @@ private lateinit var currentFragment: Fragment
 //--------------------------------------------------------------------------------------------------
 // On Create
 //--------------------------------------------------------------------------------------------------
-class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListener, AddBinFragment.OnFragmentInteractionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,16 +28,16 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         mapButton = findViewById(R.id.activity_main_map_button)
 
         configureMapButton()
-        showMapFragment()
+        showMapFragment(null)
     }
 
 
 //--------------------------------------------------------------------------------------------------
 // Show fragment
 //--------------------------------------------------------------------------------------------------
-    private fun showMapFragment(){
+    private fun showMapFragment(binType: String?){
         Log.d("ActivityMain", "showMapFragment()")
-        currentFragment = MapFragment()
+        currentFragment = MapFragment.newInstance(binType)
         // Update fragment
         supportFragmentManager
                 .beginTransaction()
@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
                 .commit()
     }
 
-    private fun showAddBinFragment(location: LatLng){
+    private fun showAddBinFragment(location: GeoPoint){
         Log.d("ActivityMain", "showAddBinFragment()")
-        currentFragment = AddBinFragment.newInstance(Converters.convertLatLngToString(location))
+        currentFragment = AddBinFragment.newInstance(Utils.convertGeoPointToString(location))
         // Update fragment
         supportFragmentManager
                 .beginTransaction()
@@ -60,12 +60,16 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 //--------------------------------------------------------------------------------------------------
     private fun configureMapButton(){
         mapButton.setOnClickListener{
-            showMapFragment()
+            showMapFragment(null)
         }
     }
 
-    override fun onFragmentSetUserLocation(userLocation: LatLng?) {
-        showAddBinFragment(userLocation!!)
+    override fun onFragmentSetUserLocation(userLocation: GeoPoint) {
+        showAddBinFragment(userLocation)
+    }
+
+    override fun binSaved(binType: String) {
+        showMapFragment(binType)
     }
 
 }

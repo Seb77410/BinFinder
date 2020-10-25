@@ -89,7 +89,7 @@
                 app:srcCompat="@drawable/ic_recycling_center" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/map_fragment_fab_landfill"
+                android:id="@+id/map_fragment_fab_wild_deposit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

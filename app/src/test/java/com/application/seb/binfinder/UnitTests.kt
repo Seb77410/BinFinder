@@ -1,11 +1,9 @@
 package com.application.seb.binfinder
 
-import android.util.Log
-import com.application.seb.binfinder.utils.Converters
+import com.application.seb.binfinder.utils.Utils
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 
 class UnitTests {
@@ -16,9 +14,11 @@ class UnitTests {
         val gSon = Gson()
         val sLocation = gSon.toJson(location)
 
-        Assert.assertEquals(sLocation, Converters.convertLatLngToString(location))
-        Assert.assertEquals(location, Converters.convertStringToLatLng(sLocation))
+        Assert.assertEquals(sLocation, Utils.convertLatLngToString(location))
+        Assert.assertEquals(location, Utils.convertStringToLatLng(sLocation))
 
     }
+
+
 
 }

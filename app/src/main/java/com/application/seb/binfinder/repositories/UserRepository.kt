@@ -22,7 +22,7 @@ class UserRepository {
 // Create
 //--------------------------------------------------------------------------------------------------
     fun createUser(userId: String, username: String, urlPicture: Uri?): Task<Void?>? {
-        val userToCreate = User(userId, username, urlPicture)
+        val userToCreate = User(userId, username, urlPicture, null)
         return usersCollection()!!.document(userId).set(userToCreate)
     }
 
@@ -31,6 +31,13 @@ class UserRepository {
 //--------------------------------------------------------------------------------------------------
     fun getUser(userId: String): Task<DocumentSnapshot?>? {
         return usersCollection()!!.document(userId).get()
+    }
+
+//--------------------------------------------------------------------------------------------------
+// Update
+//--------------------------------------------------------------------------------------------------
+    fun updateUserLikedBinsList(user: User): Task<Void> {
+        return usersCollection()!!.document(user.userId).update("likedBinsList", user.likedBinsList)
     }
 
 }

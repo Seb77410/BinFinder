@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.conrollers.fragments
+package com.application.seb.binfinder.controllers.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
@@ -17,13 +17,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.models.Bin
-import com.application.seb.binfinder.utils.Converters
+import com.application.seb.binfinder.utils.Utils
+import com.ckdroid.geofirequery.setLocation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
-    private const val PARAM = "user_location"
+private const val PARAM = "user_location"
     private const val REQUEST_IMAGE_CAPTURE = 1
-
+    private const val TAG = "AddBinFragment"
 
 class AddBinFragment : Fragment() {
 //--------------------------------------------------------------------------------------------------
@@ -35,6 +37,10 @@ class AddBinFragment : Fragment() {
     private var userTakePhoto = false
     private lateinit var radioGroup: RadioGroup
     private lateinit var addBinFragmentViewModel: AddBinFragmentViewModel
+
+    interface OnFragmentInteractionListener {
+        fun binSaved(binType: String)
+    }
 
 
 //--------------------------------------------------------------------------------------------------
@@ -58,7 +64,7 @@ class AddBinFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             location = it.getString(PARAM)
-            Log.d("AddBinFragment", " Argument location =$location")
+            Log.d(TAG, " Argument $PARAM = $location")
         }
     }
 
@@ -94,44 +100,53 @@ class AddBinFragment : Fragment() {
                 .setTitle(getString(R.string.alert_dialog_no_photo_title))
                 .setMessage(getString(R.string.alert_dialog_no_photo_content))
                 .setPositiveButton(getString(R.string.alert_dialog_ok_button)){ _: DialogInterface, _:Int ->
-                    Log.d("AddBinFragment", "No photo alert dialog - click YES button")
+                    Log.d(TAG, "No photo alert dialog - click YES button")
                 }
                 .show()
     }
 
     private fun showSaveConfirmDialog(){
-
         val dialogBuilder = AlertDialog.Builder(context!!)
         dialogBuilder
                 .setTitle(getString(R.string.alert_dialog_save_location_title))
                 .setMessage(getString(R.string.alert_dialog_save_location_content))
                 .setPositiveButton(getString(R.string.alert_dialog_yes_button)) { _: DialogInterface, _: Int ->
-                    Log.d("AddBinFragment", "Saving alert dialog - click YES button")
+                    Log.d(TAG, "Saving alert dialog - click YES button")
                     saveLocation()
                 }
                 .setNegativeButton(getString(R.string.alert_dialog_no_button)) { _: DialogInterface, _: Int ->
-                    Log.d("AddBinFragment", "Saving alert dialog - click NO button")
+                    Log.d(TAG, "Saving alert dialog - click NO button")
                 }
                 .show()
     }
 
     private fun saveLocation() {
-
         // Get bin type
         val radioButtonID: Int = radioGroup.checkedRadioButtonId
         val radioButton: RadioButton = radioGroup.findViewById(radioButtonID)
         val binType = radioButton.text.toString()
-        Log.d("AddBinFragment", "bin type = $binType")
-        // Get user location to LatLng
-        val userLocation = Converters.convertStringToLatLng(location!!)
-        Log.d("AddBinFragment", "bin type = $userLocation")
+        Log.d(TAG, "saveLocation() -> bin type = $binType")
         // Get user id and user name
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val userName = FirebaseAuth.getInstance().currentUser!!.displayName
-        val bin = Bin(null, binType, userLocation, userId, userName!!)
-
         // Create Bin
-        addBinFragmentViewModel.saveBinToFirebase(imageButton, bin)
+        val bin = Bin(null, binType, Utils.convertStringToGeoPoint(location!!), userId, userName!!)
+        addBinFragmentViewModel.saveBinToFirebase(bin)
+                .addOnSuccessListener { document ->
+                    Log.d(TAG, "Bin create successful")
+                    document.setLocation(bin.geoLocation!!.latitude, bin.geoLocation!!.longitude)
+
+                    addBinFragmentViewModel.savePhotoToFirebase(imageButton, document.id)
+                            .addOnSuccessListener {
+                                // Start notification
+                                Utils.startNotification(getString(R.string.notification_title_bin_save), getString(R.string.notification_content_bin_save), context!!)
+                                // Show location on MapFragment
+                                (Objects.requireNonNull(activity) as OnFragmentInteractionListener).binSaved(binType)
+                                Log.d(TAG, "Photo upload successful")
+                            }
+                            .addOnFailureListener {Log.e(TAG, "Photo upload failed")}
+                }
+                .addOnFailureListener {Log.e("AddBinFragment", "Bin create failed")}
     }
 
 //--------------------------------------------------------------------------------------------------
