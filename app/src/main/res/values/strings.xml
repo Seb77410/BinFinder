@@ -42,4 +42,11 @@
     <string name="notification_title_bin_save">Bin saved</string>
     <string name="notification_content_bin_save">The bin as been correctly saved</string>
 
+    <!-- Menu drawer -->
+    <string name="navigation_drawer_open">navigation drawer open</string>
+    <string name="navigation_drawer_close">navigation drawer close</string>
+    <string name="settings">SETTINGS</string>
+    <string name="logout">LOGOUT</string>
+    <string name="my_clean_envents">MY CLEAN ENVENTS</string>
+
 </resources>

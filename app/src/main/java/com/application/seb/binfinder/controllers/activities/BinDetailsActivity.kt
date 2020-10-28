@@ -126,11 +126,11 @@ class BinDetailsActivity : AppCompatActivity() {
 
 
     /**
-     * This method configure toolbar back stack
+     * This method configure toolbar navigation_drawer_background stack
      */
     private fun configureBackStack() {
         setSupportActionBar(mToolbar)
-        // Set back stack
+        // Set navigation_drawer_background stack
         val upArrow = ResourcesCompat.getDrawable(this.resources, R.drawable.ic_arrow_black_24, null)
         val actionBar = supportActionBar
         if (actionBar != null) {
