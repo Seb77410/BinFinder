@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.activities.BinDetailsActivity
+import com.application.seb.binfinder.controllers.activities.binDetails.BinDetailsActivity
 import com.application.seb.binfinder.models.Bin
 import com.application.seb.binfinder.repositories.BinRepository
 import com.application.seb.binfinder.utils.Constants
@@ -34,8 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.GeoPoint
 import java.util.*
 
-private const val LOCATION_PERMISSION_CODE = 1
 private const val TAG = "MapFragment"
+private const val LOCATION_PERMISSION_CODE = 1
 private const val PARAM = "binType"
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -157,9 +157,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                             userLocation = GeoPoint(location.latitude, location.longitude)
                             // Move camera to current position
                             googleMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 12f))
-                            if(toStartAddBinFragment){
-                                (Objects.requireNonNull(activity) as OnFragmentInteractionListener).onFragmentSetUserLocation(userLocation)
-                            }
+                            if(toStartAddBinFragment){ (Objects.requireNonNull(activity) as OnFragmentInteractionListener).onFragmentSetUserLocation(userLocation) }
                             if (toInitialiseView){showSavedLocation() }
 
                         }
@@ -254,7 +252,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val binRepository = BinRepository()
 
         binRepository.getBinByDistance(userLocation.latitude, userLocation.longitude ,type).addSnapshotListener { _, mutableList, mutableList2 ->
-            Log.e(TAG, "Bins found = ${mutableList.size} and list2 = ${mutableList2.size} for type = $type")
+            Log.d(TAG, "Bins found = ${mutableList.size} and list2 = ${mutableList2.size} for type = $type")
             // Clear data
             locationsList!!.clear()
             removeAllMarker()
@@ -276,7 +274,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             val mMarker: Marker = googleMap!!.addMarker(markerOptions)
             mMarker.tag = bin.binId
             markersList!!.add(mMarker)
-            Log.e(TAG, "Bin id = " + bin.binId)
+            Log.d(TAG, "showMarker() for Bin id = " + bin.binId)
         }
     }
 
@@ -286,7 +284,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        Log.e(TAG, "marker tag = " + p0!!.tag.toString())
+        Log.d(TAG, "marker tag = " + p0!!.tag.toString())
         if (p0.tag != null) {
             // Set marker place Id into string value
             val intent = Intent(activity, BinDetailsActivity::class.java)

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controllers.activities.BinDetailsActivity"
+    tools:context=".controllers.activities.binDetails.BinDetailsActivity"
     >
 
     <androidx.appcompat.widget.Toolbar
@@ -24,11 +24,11 @@
         android:id="@+id/bin_details_activity_photo"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:contentDescription="location photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bin_details_activity_appbar" />
+        app:layout_constraintTop_toBottomOf="@+id/bin_details_activity_appbar"
+        tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bin_details_activity_like_layout"
@@ -56,7 +56,7 @@
             android:layout_height="90dp"
             android:drawableTop="@drawable/ic_like"
             app:drawableTint="@color/grey"
-            android:text="Like"
+            android:text="@string/like"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/bin_details_activity_guideline"
@@ -72,7 +72,7 @@
             android:layout_height="90dp"
             android:drawableTop="@drawable/ic_unlike"
             app:drawableTint="@color/grey"
-            android:text="Dislike"
+            android:text="@string/dislike"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -11,16 +11,28 @@
     <string name="sign_in_skip">SKIP</string>
     <string name="sign_in_base_image_description">sign_in_base_image</string>
 
+    <!-- Add Clean Event activity -->
+    <string name="add_clean_event_activity_name">Edit clean event</string>
+    <string name="invalid_address">Invalid address</string>
+    <string name="required">Required !</string>
+
+    <!-- Clean Event Details activity -->
+    <string name="details">Details</string>
+    <string name="participate">Participate</string>
+
+
     <!-- Alert dialog -->
-    <string name="alert_dialog_add_bin_title">Add bin place</string>
-    <string name="alert_dialog_add_bin_content">Are you sure you want to add a bin on your location ?</string>
     <string name="alert_dialog_yes_button">Yes</string>
     <string name="alert_dialog_no_button">No</string>
+    <string name="alert_dialog_add_bin_title">Add bin place</string>
+    <string name="alert_dialog_add_bin_content">Are you sure you want to add a bin on your location ?</string>
     <string name="alert_dialog_no_photo_title">Add photo</string>
-    <string name="alert_dialog_no_photo_content">No photo added. You have to take one photo in order to save location</string>
+    <string name="alert_dialog_no_photo_content">No photo added. You have to take one photo in order to save</string>
     <string name="alert_dialog_save_location_title">Save location</string>
     <string name="alert_dialog_save_location_content">By confirming data, the location will be permanently saved and can no longer be modified.</string>
-    <string name="alert_dialog_ok_button">ok</string>
+    <string name="alert_dialog_ok_button">OK</string>
+    <string name="alert_dialog_delete_event_title">Delete</string>
+    <string name="alert_dialog_delete_event_content">Please confirm to delete this Clean Event</string>
 
     <!-- Add bin fragment -->
     <string name="add_bin_fragment_photo_container">add_bin_frag_photo_container</string>
@@ -41,12 +53,40 @@
     <!-- Notifications -->
     <string name="notification_title_bin_save">Bin saved</string>
     <string name="notification_content_bin_save">The bin as been correctly saved</string>
+    <string name="notification_title_clean_event_save">Event saved</string>
+    <string name="notification_content_clean_event_save">The Event as been correctly saved</string>
+    <string name="notification_title_clean_event_update">Event updated</string>
+    <string name="notification_content_clean_event_update">Event successful update</string>
 
     <!-- Menu drawer -->
     <string name="navigation_drawer_open">navigation drawer open</string>
     <string name="navigation_drawer_close">navigation drawer close</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
-    <string name="my_clean_envents">MY CLEAN ENVENTS</string>
+    <string name="my_clean_events">MY CLEAN EVENTS</string>
+
+    <!-- Clean Events fragment  -->
+    <string name="clean_events_fragment_title">Clean events</string>
+
+    <!-- View Pager pages title -->
+    <string name="page_title_soon">Soon</string>
+    <string name="page_title_my_clean_events">My clean events</string>
+
+    <!-- Add clean event activity values -->
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="create">Create</string>
+
+    <!-- Bin value -->
+    <string name="like">Like</string>
+    <string name="dislike">Dislike</string>
+    <string name="description">Description</string>
+    <string name="comments">Comments</string>
+    <string name="pls_enter_a_comment">Pls enter a comment</string>
+
+    <!-- Menu values -->
+    <string name="update">update</string>
+    <string name="remove">Remove</string>
+
 
 </resources>

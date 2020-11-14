@@ -1,19 +1,21 @@
 package com.application.seb.binfinder.controllers.activities
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.fragments.AddBinFragment
+import com.application.seb.binfinder.controllers.fragments.addBin.AddBinFragment
+import com.application.seb.binfinder.controllers.fragments.CleanEventFragment
 import com.application.seb.binfinder.controllers.fragments.MapFragment
 import com.application.seb.binfinder.utils.Utils
 import com.bumptech.glide.Glide
@@ -23,11 +25,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
-import java.util.*
 
 //--------------------------------------------------------------------------------------------------
 // For data
 //--------------------------------------------------------------------------------------------------
+private const val TAG = "MainActivity"
 private lateinit var mapButton: FloatingActionButton
 private lateinit var currentFragment: Fragment
 private lateinit var navigationView:NavigationView
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 // Show fragment
 //--------------------------------------------------------------------------------------------------
     private fun showMapFragment(binType: String?){
-        Log.d("ActivityMain", "showMapFragment()")
+        Log.d(TAG, "showMapFragment()")
         currentFragment = MapFragment.newInstance(binType)
         // Update fragment
         supportFragmentManager
@@ -75,8 +77,18 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
     }
 
     private fun showAddBinFragment(location: GeoPoint){
-        Log.d("ActivityMain", "showAddBinFragment()")
+        Log.d(TAG, "showAddBinFragment()")
         currentFragment = AddBinFragment.newInstance(Utils.convertGeoPointToString(location))
+        // Update fragment
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.activity_main_frameLayout, currentFragment)
+                .commit()
+    }
+
+    private fun showCleanEventFragment(){
+        Log.d(TAG, "showCleanEventFragment()")
+        currentFragment = CleanEventFragment.newInstance("z", "&")
         // Update fragment
         supportFragmentManager
                 .beginTransaction()
@@ -87,58 +99,41 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 //--------------------------------------------------------------------------------------------------
 // Map button
 //--------------------------------------------------------------------------------------------------
-    private fun configureMapButton(){
-        mapButton.setOnClickListener{
-            showMapFragment(null)
-        }
-    }
+    private fun configureMapButton() = mapButton.setOnClickListener{ showMapFragment(null) }
 
-    override fun onFragmentSetUserLocation(userLocation: GeoPoint) {
-        showAddBinFragment(userLocation)
-    }
 
-    override fun binSaved(binType: String) {
-        showMapFragment(binType)
-    }
+    override fun onFragmentSetUserLocation(userLocation: GeoPoint) = showAddBinFragment(userLocation)
+
+
+    override fun binSaved(binType: String) = showMapFragment(binType)
 
 
 //--------------------------------------------------------------------------------------------------
 // For Navigation Drawer
 //--------------------------------------------------------------------------------------------------
-    private fun setDrawerUserInfos() {
-
+    private fun setDrawerUserInfo() {
     // Set user name
-    val userName = Objects.requireNonNull(FirebaseAuth.getInstance().currentUser)!!.displayName
+    val userName = FirebaseAuth.getInstance().currentUser!!.displayName
     drawerUserName.text = userName
-
     // Set user email
     val userEmail = FirebaseAuth.getInstance().currentUser!!.email
     drawerUserEmail.text = userEmail
 
     // Set user photo
-    val uri = FirebaseAuth.getInstance().currentUser!!.photoUrl
-    if (uri != null) {
-        val userPhotoUrl = uri.toString()
-        Log.d("Drawer menu", "User photo url : $userPhotoUrl")
-        Glide
-                .with(applicationContext)
-                .load(userPhotoUrl)
-                .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.no_image)
-                .error(R.drawable.no_image)
-                .into(drawerUserPhoto)
-    } else {
-        Glide
-                .with(applicationContext)
-                .load(R.drawable.no_image)
-                .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.no_image)
-                .error(R.drawable.no_image)
-                .into(drawerUserPhoto)
-        }
+    Glide
+        .with(applicationContext)
+        .load(setPhotoData())
+        .apply(RequestOptions.circleCropTransform())
+        .placeholder(R.drawable.no_image)
+        .error(R.drawable.no_image)
+        .into(drawerUserPhoto)
 
     }
 
+    private fun setPhotoData(): Any?{
+        val uri = FirebaseAuth.getInstance().currentUser!!.photoUrl
+        return uri?.toString() ?: ContextCompat.getDrawable(this, R.drawable.no_image)
+    }
 
     /**
      * This method configure Drawer Layout and add burger button on the left of toolbar
@@ -153,20 +148,23 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         // Allow user tu click on Menu drawer item button
         navigationView.setNavigationItemSelectedListener(this)
         // Show user data
-        setDrawerUserInfos()
+        setDrawerUserInfo()
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            // "LOGOUT" -> SignIn Activity
             R.id.activity_main_drawer_logout -> {
+                Log.d(TAG, "Drawer menu -> click LOGOUT button")
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
             }
 
+            // "MY CLEAN EVENTS" -> CleanEventFragment()
             R.id.activity_main_drawer_my_clean_events -> {
-                Log.e("main activity", "click button clean event")
+                Log.d(TAG, "Drawer menu -> click MY CLEAN EVENTS button")
                 // TODO : start clean event fragment
             }
 
@@ -184,12 +182,14 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         appBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_main_clean_events -> {
-                    Log.e("MainActivity", "click on button clean event")
-                    // TODO : start clean event fragment
+                    Log.d(TAG, "Toolbar menu -> click CLEAN EVENT button")
+                    showCleanEventFragment()
                     true
                 }
                 else -> false
             }
         }
     }
+
+
 }

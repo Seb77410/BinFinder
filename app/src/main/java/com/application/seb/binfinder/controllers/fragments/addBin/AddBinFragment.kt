@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.fragments
+package com.application.seb.binfinder.controllers.fragments.addBin
 
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
@@ -17,15 +17,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.models.Bin
+import com.application.seb.binfinder.utils.Constants
 import com.application.seb.binfinder.utils.Utils
 import com.ckdroid.geofirequery.setLocation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
-private const val PARAM = "user_location"
-    private const val REQUEST_IMAGE_CAPTURE = 1
     private const val TAG = "AddBinFragment"
+    private const val PARAM = "user_location"
+    private const val REQUEST_IMAGE_CAPTURE = 1
 
 class AddBinFragment : Fragment() {
 //--------------------------------------------------------------------------------------------------
@@ -38,10 +39,7 @@ class AddBinFragment : Fragment() {
     private lateinit var radioGroup: RadioGroup
     private lateinit var addBinFragmentViewModel: AddBinFragmentViewModel
 
-    interface OnFragmentInteractionListener {
-        fun binSaved(binType: String)
-    }
-
+    interface OnFragmentInteractionListener { fun binSaved(binType: String) }
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -146,7 +144,7 @@ class AddBinFragment : Fragment() {
                             }
                             .addOnFailureListener {Log.e(TAG, "Photo upload failed")}
                 }
-                .addOnFailureListener {Log.e("AddBinFragment", "Bin create failed")}
+                .addOnFailureListener {Log.e(TAG, "Bin create failed")}
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,7 +167,7 @@ class AddBinFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras!!.get("data") as Bitmap
+            val imageBitmap = data!!.extras!!.get(Constants.DATA) as Bitmap
             imageButton.setImageBitmap(imageBitmap)
             userTakePhoto = true
         }

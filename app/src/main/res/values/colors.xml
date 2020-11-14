@@ -4,14 +4,12 @@
     <color name="colorPrimaryDark">#087f23</color>
     <color name="colorAccent">#80e27e</color>
 
-    <color name="secondaryColor">#9e9e9e</color>
+    <color name="colorAccentTransparent">#4D80E27E</color>
 
-    <color name="green">#087f23</color>
     <color name="transparent">#00000000 </color>
 
-    <color name="grey">#bdbdbd</color>
+    <color name="grey">#80DCDCDC</color>
 
-    <color name="maron">#402907</color>
-
+    <color name="blackTransparent">#CC000000</color>
 
 </resources>

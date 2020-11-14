@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.activities
+package com.application.seb.binfinder.controllers.activities.binDetails
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.application.seb.binfinder.BuildConfig
@@ -23,7 +24,6 @@ import com.application.seb.binfinder.repositories.BinRepository
 import com.application.seb.binfinder.utils.Constants
 import com.application.seb.binfinder.utils.GlideApp
 import com.application.seb.binfinder.utils.Service
-import org.w3c.dom.Comment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -92,7 +92,7 @@ class BinDetailsActivity : AppCompatActivity() {
 
     private fun getBinData(){
         viewModel = BinDetailsActivityViewModel()
-        viewModel.getBinData(binId!!).addOnSuccessListener {mBin ->
+        viewModel.getBinData(binId!!).addOnSuccessListener { mBin ->
             bin = mBin.toObject(Bin::class.java)!!
             getUserData()
         }
@@ -122,7 +122,8 @@ class BinDetailsActivity : AppCompatActivity() {
        configureTitle()
    }
 
-    private fun configureTitle(){mToolbar.title = bin.type}
+    private fun configureTitle(){
+        mToolbar.title = bin.type}
 
 
     /**
@@ -164,11 +165,11 @@ class BinDetailsActivity : AppCompatActivity() {
                 viewModel.updateBinLike(binId!!, 1)
                 // Update User data
                 if(user.likedBinsList == null){ user.likedBinsList = mutableMapOf() }
-                user.likedBinsList!![binId!!] = "like"
+                user.likedBinsList!![binId!!] = Constants.BIN_LIKE
                 viewModel.updateUser(user)
                 // Update likes buttons colors
                 DrawableCompat.setTint(likeButtonDrawable, Color.GREEN)
-                DrawableCompat.setTint(dislikeButtonDrawable, resources.getColor(R.color.grey))
+                DrawableCompat.setTint(dislikeButtonDrawable,  ContextCompat.getColor(applicationContext, R.color.grey) )
             }
         }
     }
@@ -183,11 +184,11 @@ class BinDetailsActivity : AppCompatActivity() {
                 viewModel.updateBinLike(binId!!, -1)
                 // Update User data
                 if(user.likedBinsList == null){ user.likedBinsList = mutableMapOf() }
-                user.likedBinsList!![binId!!] = "dislike"
+                user.likedBinsList!![binId!!] = Constants.BIN_DISLIKE
                 viewModel.updateUser(user)
                 // Update likes buttons colors
                 DrawableCompat.setTint(dislikeButtonDrawable, Color.RED)
-                DrawableCompat.setTint(likeButtonDrawable,  resources.getColor(R.color.grey))
+                DrawableCompat.setTint(likeButtonDrawable,  ContextCompat.getColor(applicationContext, R.color.grey))
             }
         }
     }
@@ -195,20 +196,20 @@ class BinDetailsActivity : AppCompatActivity() {
     private fun setDefaultButtonsColor(){
         if (user.likedBinsList != null && user.likedBinsList!!.containsKey(binId.toString())){
 
-            if (user.likedBinsList!!.getValue(binId.toString()) == "like"){
+            if (user.likedBinsList!!.getValue(binId.toString()) == Constants.BIN_LIKE){
                 // Update button check data
                 likeButtonIsCheck = true
                 dislikeButtonIsCheck = false
                 // Update likes buttons colors
                 DrawableCompat.setTint(likeButtonDrawable, Color.GREEN)
-                DrawableCompat.setTint(dislikeButtonDrawable, resources.getColor(R.color.grey))
+                DrawableCompat.setTint(dislikeButtonDrawable, ContextCompat.getColor(applicationContext, R.color.grey))
             }else{
                 // Update button check data
                 dislikeButtonIsCheck = true
                 likeButtonIsCheck = false
                 // Update likes buttons colors
                 DrawableCompat.setTint(dislikeButtonDrawable, Color.RED)
-                DrawableCompat.setTint(likeButtonDrawable,  resources.getColor(R.color.grey))
+                DrawableCompat.setTint(likeButtonDrawable,  ContextCompat.getColor(applicationContext, R.color.grey))
             }
         }
     }
@@ -255,13 +256,13 @@ class BinDetailsActivity : AppCompatActivity() {
     private fun setBinWasteContent(){
 
         viewModel.getBinWasteById(bin.type).addOnSuccessListener { document ->
-           var binWaste: BinWaste = document.toObject(BinWaste::class.java)!!
+           val binWaste: BinWaste = document.toObject(BinWaste::class.java)!!
             addressComment.text = binWaste.comment
 
             if(binWaste.wastes != null){
                 for(waste in binWaste.wastes!!){
-                    var textView = TextView(baseContext)
-                    textView.text = "- $waste"
+                    val textView = TextView(baseContext)
+                    textView.text = String.format("%s %s", "- ", waste)
                     wasteContent.addView(textView)
                 }
             }

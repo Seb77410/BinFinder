@@ -1,8 +1,8 @@
 package com.application.seb.binfinder.repositories
 
 import android.location.Location
-import android.util.Log
 import com.application.seb.binfinder.models.Bin
+import com.application.seb.binfinder.utils.Constants
 import com.ckdroid.geofirequery.GeoQuery
 import com.ckdroid.geofirequery.model.Distance
 import com.ckdroid.geofirequery.utils.BoundingBoxUtils
@@ -15,7 +15,9 @@ import com.google.firebase.storage.ktx.storage
 
 
 private const val BIN_COLLECTION_REFERENCE = "Bins"
-private const val TAG = "BinRepository"
+private const val LOCATION = "myLocation"
+private const val MAX_DISTANCE_SEARCH = 10000.0
+private const val MAX_LOCATION_NUMBER: Long = 5
 
 class BinRepository {
 
@@ -27,12 +29,8 @@ class BinRepository {
         return FirebaseFirestore.getInstance().collection(BIN_COLLECTION_REFERENCE)
     }
 
-    fun photoCollection(binId: String): StorageReference {
-        return Firebase.storage.reference
-    }
-
     fun photoReference(binId: String): StorageReference {
-        return Firebase.storage.getReference(binId)
+        return Firebase.storage.reference.child("$BIN_COLLECTION_REFERENCE/$binId")
     }
 
 
@@ -56,21 +54,17 @@ class BinRepository {
         return binCollection()!!.document(binId).get()
     }
 
-    fun getBinByType(type: String): Task<QuerySnapshot> {
-        return binCollection()!!.whereEqualTo("type", type).get()
-    }
-
     fun getBinByDistance(lat: Double, long: Double, type : String): GeoQuery {
-        val centerLocation = Location("myLocation")
+        val centerLocation = Location(LOCATION)
         centerLocation.latitude = lat
         centerLocation.longitude = long
-        val distanceForRadius = Distance(10000.0, BoundingBoxUtils.DistanceUnit.KILOMETERS)
+        val distanceForRadius = Distance(MAX_DISTANCE_SEARCH, BoundingBoxUtils.DistanceUnit.KILOMETERS)
 
         return GeoQuery()
                 .collection(BIN_COLLECTION_REFERENCE)
-                .whereEqualTo("type",type)
+                .whereEqualTo(Constants.CLEAN_EVENT_TYPE,type)
                 .whereNearToLocation(centerLocation, distanceForRadius)
-                .limit(5)
+                .limit(MAX_LOCATION_NUMBER)
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,11 +77,13 @@ class BinRepository {
         return FirebaseFirestore.getInstance().runTransaction { transaction ->
             val snapshot = transaction.get(binRef)
 
-            val newLikeNumber = snapshot.getDouble("like")!! + incrementValue
-            transaction.update(binRef, "like", newLikeNumber)
+            val newLikeNumber = snapshot.getDouble(Constants.BIN_LIKE)!! + incrementValue
+            transaction.update(binRef, Constants.BIN_LIKE, newLikeNumber)
 
             // Success
             null
         }
     }
+
+
 }

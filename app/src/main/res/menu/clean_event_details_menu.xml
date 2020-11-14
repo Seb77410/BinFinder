@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/clean_events_details_menu_edit"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_edit_24"
+        app:iconTint="@android:color/white"
+        android:orderInCategory="1"
+        android:title="@string/update" />
+
+    <item
+        android:id="@+id/clean_events_details_menu_remove"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_delete_24"
+        app:iconTint="@android:color/white"
+        android:orderInCategory="1"
+        android:title="@string/remove" />
+
+
+</menu>

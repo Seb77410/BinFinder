@@ -13,11 +13,12 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 
-const val RC_SIGN_IN = 1
+private const val TAG = "SignInActivity"
+private const val RC_SIGN_IN = 1
 
-    //----------------------------------------------------------------------------------------------
-    // On Create
-    //----------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// On Create
+//--------------------------------------------------------------------------------------------------
 
 class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,19 +26,18 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signin)
 
         if (FirebaseAuth.getInstance().currentUser != null) {
-            Log.d("SignIn", FirebaseAuth.getInstance().currentUser.toString())
+            Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
             val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
         } else {
             this.startSignInActivity()
         }
 
-
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Sign In method
-    //----------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Sign In method
+//--------------------------------------------------------------------------------------------------
 
     private fun startSignInActivity() {
         val providers = arrayListOf(
@@ -64,9 +64,9 @@ class SignInActivity : AppCompatActivity() {
                 RC_SIGN_IN)
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Sign In result
-    //----------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Sign In result
+//--------------------------------------------------------------------------------------------------
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -78,15 +78,15 @@ class SignInActivity : AppCompatActivity() {
                 createUser()
             } else when {
                 response == null -> {
-                    Log.e("SignIn activity", "Error : Auth cancel")
+                    Log.e(TAG, "Error : Auth cancel")
                     startSignInActivity()
                 }
                 response.error!!.errorCode == ErrorCodes.NO_NETWORK -> {
-                    Log.e("SignIn activity", "Error : internet is OFF")
+                    Log.e(TAG, "Error : internet is OFF")
                     startSignInActivity()
                 }
                 response.error!!.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
-                    Log.e("SignIn activity", "Unknown error")
+                    Log.e(TAG, "Unknown error")
                     startSignInActivity()
                 }
             }
@@ -95,9 +95,9 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-//----------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Create User
-//----------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 
     private fun createUser(){
         val userRepository = UserRepository()
@@ -106,18 +106,19 @@ class SignInActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val document = task.result
                         if (document == null) {Log.e("SignIn", "User document is NULL")}
-                        else {Log.d("SignIn", "User document is NOT NULL")
+                        else {
+                            Log.d(TAG, "User document is NOT NULL")
                             if (document.exists()) {
+                                Log.d(TAG, "User document already exist")
                                 startMainActivity()
-                                Log.d("SignIn", "User document already exist")
                             }
                             else {
+                                Log.d(TAG, "User CREATE")
                                 userRepository
                                         .createUser(FirebaseAuth.getInstance().currentUser!!.uid,
                                             FirebaseAuth.getInstance().currentUser!!.displayName!!,
                                             FirebaseAuth.getInstance().currentUser?.photoUrl )!!
                                         .addOnSuccessListener {startMainActivity()}
-                                Log.d("SignIn", "User CREATE")
                             }
                         }
                     }
@@ -129,5 +130,6 @@ class SignInActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
     }
+
 }
 

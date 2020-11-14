@@ -8,6 +8,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 private const val USER_COLLECTION_REFERENCE = "Users"
+private const val USER_LIKED_BIN_LIST = "likedBinsList"
+
 
 class UserRepository {
 
@@ -37,7 +39,7 @@ class UserRepository {
 // Update
 //--------------------------------------------------------------------------------------------------
     fun updateUserLikedBinsList(user: User): Task<Void> {
-        return usersCollection()!!.document(user.userId).update("likedBinsList", user.likedBinsList)
+        return usersCollection()!!.document(user.userId).update(USER_LIKED_BIN_LIST, user.likedBinsList)
     }
 
 }

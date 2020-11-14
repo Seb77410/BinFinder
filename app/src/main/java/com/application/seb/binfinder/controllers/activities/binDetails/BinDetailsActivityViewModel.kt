@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.activities
+package com.application.seb.binfinder.controllers.activities.binDetails
 
 import androidx.lifecycle.ViewModel
 import com.application.seb.binfinder.models.User

@@ -32,10 +32,16 @@
     </style>
 
     <style name="FirebaseUI.Text.Link">
-        <item name="android:textColor">@color/green</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Date picker theme -->
+    <style name="TimePickerTheme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
     
-
 
 
 </resources>

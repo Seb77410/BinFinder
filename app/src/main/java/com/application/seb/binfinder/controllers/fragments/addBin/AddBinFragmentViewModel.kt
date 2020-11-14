@@ -1,14 +1,11 @@
-package com.application.seb.binfinder.controllers.fragments
+package com.application.seb.binfinder.controllers.fragments.addBin
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 import android.widget.ImageButton
 import androidx.lifecycle.ViewModel
 import com.application.seb.binfinder.models.Bin
 import com.application.seb.binfinder.repositories.BinRepository
-import com.application.seb.binfinder.utils.Utils
-import com.ckdroid.geofirequery.setLocation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.storage.UploadTask

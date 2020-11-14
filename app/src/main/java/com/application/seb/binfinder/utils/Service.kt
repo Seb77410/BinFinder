@@ -21,4 +21,11 @@ interface Service {
             @Query(Constants.GEOCODE_KEY_QUERY) apiKey: String?)
             : Call<GeocodeResponse?>?
 
+
+    @GET(Constants.GEOCODE_JSON_FORMAT)
+    fun getAddressToLatLng(
+            @Query(Constants.GEOCODE_ADDRESS_QUERY) address: String,
+            @Query(Constants.GEOCODE_KEY_QUERY) apiKey: String)
+            : Call<GeocodeResponse?>?
+
 }

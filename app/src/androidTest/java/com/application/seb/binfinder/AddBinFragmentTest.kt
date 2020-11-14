@@ -7,7 +7,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.application.seb.binfinder.controllers.activities.MainActivity
-import com.application.seb.binfinder.controllers.fragments.AddBinFragment
+import com.application.seb.binfinder.controllers.fragments.addBin.AddBinFragment
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
