@@ -26,6 +26,7 @@ import com.ckdroid.geofirequery.setLocation
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.GeoPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -72,7 +73,7 @@ class AddCleanEventActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.add_clean_event_activity_toolbar)
         imageButton = findViewById(R.id.add_clean_event_activity_image)
-        titleLayout = findViewById(R.id.add_clean_event_activity_title)
+        titleLayout = findViewById(R.id.add_clean_event_activity_title_value)
         dateLayout = findViewById(R.id.add_clean_event_activity_date)
         addressLayout = findViewById(R.id.add_clean_event_activity_address)
         descriptionLayout = findViewById(R.id.add_clean_event_activity_description)
@@ -97,6 +98,7 @@ class AddCleanEventActivity : AppCompatActivity() {
         if(sEvent != null){
             event = Utils.convertStringToCleanEvent(sEvent)
             activityIsForEventEdit = true
+            Log.d(TAG, "is start for edit clean event")
         }
     }
 
@@ -108,7 +110,7 @@ class AddCleanEventActivity : AppCompatActivity() {
     private fun configureToolbar() {
         // Set action bar
         setSupportActionBar(toolbar)
-        if(activityIsForEventEdit){ toolbar.title = getString(R.string.add_clean_event_activity_name)}
+        if(activityIsForEventEdit){ toolbar.title = getString(R.string.edit_clean_event_activity_title)}
         //Set back stack
         val upArrow = ResourcesCompat.getDrawable(this.resources, R.drawable.ic_arrow_back_white_24dp, null)
         val actionBar = supportActionBar
@@ -117,6 +119,7 @@ class AddCleanEventActivity : AppCompatActivity() {
             actionBar.setDisplayHomeAsUpEnabled(true)
         }
     }
+
 
 
 //--------------------------------------------------------------------------------------------------
@@ -221,7 +224,8 @@ class AddCleanEventActivity : AppCompatActivity() {
                 if (response.body()!!.status == "OK") {
                     val lat = response.body()!!.results[0].geometry.location.lat
                     val lng = response.body()!!.results[0].geometry.location.lng
-                    model.saveCleanEventToFireStore(createDate.toString(), createBy, FirebaseAuth.getInstance().uid!!, eventDate, participants, description.toString(), title.toString(), address.toString())
+                    val geoPoint = GeoPoint(lat, lng)
+                    model.saveCleanEventToFireStore(createDate.toString(), createBy, FirebaseAuth.getInstance().uid!!, eventDate, participants, description.toString(), title.toString(), address.toString(), geoPoint)
                             .addOnSuccessListener { doc ->
                                 model.updateCleanEventId(doc.id).addOnSuccessListener {
                                     doc.setLocation(lat, lng).addOnSuccessListener {

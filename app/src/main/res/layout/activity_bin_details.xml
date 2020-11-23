@@ -20,15 +20,26 @@
         />
 
 
-    <ImageView
-        android:id="@+id/bin_details_activity_photo"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bin_details_activity_cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bin_details_activity_appbar"
-        tools:ignore="ContentDescription" />
+        >
+        <ImageView
+            android:id="@+id/bin_details_activity_photo"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            tools:ignore="ContentDescription" />
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bin_details_activity_like_layout"
@@ -36,8 +47,9 @@
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bin_details_activity_photo"
+        app:layout_constraintTop_toBottomOf="@+id/bin_details_activity_cardView"
         android:background="@color/colorPrimary"
+        android:layout_marginTop="10dp"
         >
 
         <androidx.constraintlayout.widget.Guideline
@@ -102,17 +114,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_like_layout" />
+                android:text="@string/title"
+                />
 
             <TextView
                 android:id="@+id/bin_details_activity_address_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="@id/bin_details_activity_address_title"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_address_title" />
+                android:layout_marginEnd="10dp"
+                android:text="@string/interrogation_point"
+                />
 
             <TextView
                 android:id="@+id/bin_details_activity_bin_waste_title"
@@ -122,8 +136,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/authorized_wastes"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/bin_details_activity_address_title"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_address_content" />
+                />
 
             <LinearLayout
                 android:id="@+id/bin_details_activity_bin_waste_content"
@@ -131,8 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="@id/bin_details_activity_bin_waste_title"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_bin_waste_title">
+                >
 
             </LinearLayout>
 
@@ -145,16 +157,22 @@
                 android:text="@string/bin_comment"
                 android:layout_marginStart="10dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/bin_details_activity_address_title"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_bin_waste_content" />
+                />
 
             <TextView
                 android:id="@+id/bin_details_activity_bin_comment_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="@id/bin_details_activity_bin_comment_title"
-                app:layout_constraintTop_toBottomOf="@id/bin_details_activity_bin_comment_title" />
+                android:layout_marginEnd="10dp"
+                android:text="@string/interrogation_point"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@
         >
 
         <TextView
-            android:id="@+id/clean_event_details_activity_title"
+            android:id="@+id/clean_event_frag_activity_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/clean_events_fragment_title"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clean_event_details_activity_title"
+            app:layout_constraintTop_toBottomOf="@id/clean_event_frag_activity_title"
             android:layout_marginTop="20dp"
             />
 
@@ -44,7 +44,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clean_event_frag_table_layout"
-
             />
 
         <ImageButton
@@ -52,9 +51,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/clean_event_details_activity_title"
+            app:layout_constraintBottom_toBottomOf="@+id/clean_event_frag_activity_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/clean_event_details_activity_title"
+            app:layout_constraintTop_toTopOf="@+id/clean_event_frag_activity_title"
             android:layout_marginEnd="10dp"
             app:srcCompat="@drawable/ic_add_black_24"
             tools:ignore="ContentDescription" />

@@ -12,14 +12,14 @@
     <string name="sign_in_base_image_description">sign_in_base_image</string>
 
     <!-- Add Clean Event activity -->
-    <string name="add_clean_event_activity_name">Edit clean event</string>
+    <string name="edit_clean_event_activity_title">Edit clean event</string>
+    <string name="add_clean_event_activity_title">Add clean event</string>
     <string name="invalid_address">Invalid address</string>
     <string name="required">Required !</string>
 
     <!-- Clean Event Details activity -->
     <string name="details">Details</string>
     <string name="participate">Participate</string>
-
 
     <!-- Alert dialog -->
     <string name="alert_dialog_yes_button">Yes</string>
@@ -49,6 +49,7 @@
     <string name="address">Address</string>
     <string name="authorized_wastes">Authorized wastes</string>
     <string name="bin_comment">Comment</string>
+    <string name="interrogation_point">\?</string>
 
     <!-- Notifications -->
     <string name="notification_title_bin_save">Bin saved</string>
@@ -57,6 +58,8 @@
     <string name="notification_content_clean_event_save">The Event as been correctly saved</string>
     <string name="notification_title_clean_event_update">Event updated</string>
     <string name="notification_content_clean_event_update">Event successful update</string>
+    <string name="notification_title_clean_event_delete">Event deleted</string>
+    <string name="notification_content_clean_event_delete">Clean event successful delete</string>
 
     <!-- Menu drawer -->
     <string name="navigation_drawer_open">navigation drawer open</string>

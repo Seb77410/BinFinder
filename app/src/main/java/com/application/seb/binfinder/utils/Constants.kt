@@ -3,7 +3,7 @@ package com.application.seb.binfinder.utils
 object Constants {
 
     // VALUES
-    const val DATA = "DATA"
+    const val DATA = "data"
 
     // NOTIFICATIONS
     const val CHANNEL_1_ID = "channel1"

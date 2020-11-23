@@ -16,6 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Clean event details"
         app:titleTextColor="@android:color/white"
+        app:menu="@menu/menu_clean_event_details"
+
         />
 
     <androidx.core.widget.NestedScrollView
@@ -36,6 +38,7 @@
             >
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/clean_event_details_activity_image_container"
                 android:layout_width="225dp"
                 android:layout_height="225dp"
                 app:cardCornerRadius="20dp"
@@ -75,6 +78,7 @@
                 android:textStyle="bold" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clean_event_details_activity_details_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -87,13 +91,13 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/clean_event_details_activity_participants_details_title"
+                    app:layout_constraintEnd_toStartOf="@+id/clean_event_details_activity_details_title"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     />
 
                 <TextView
-                    android:id="@+id/clean_event_details_activity_participants_details_title"
+                    android:id="@+id/clean_event_details_activity_details_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/details"
@@ -113,7 +117,7 @@
                     android:background="@color/colorPrimary"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/clean_event_details_activity_participants_details_title"
+                    app:layout_constraintStart_toEndOf="@+id/clean_event_details_activity_details_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
@@ -184,6 +188,7 @@
            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clean_event_details_activity_description_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -274,6 +279,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clean_event_details_activity_comments_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

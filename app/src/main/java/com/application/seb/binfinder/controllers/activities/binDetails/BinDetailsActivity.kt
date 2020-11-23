@@ -146,7 +146,7 @@ class BinDetailsActivity : AppCompatActivity() {
     private fun setPhotoContent(){
         binPhoto = findViewById(R.id.bin_details_activity_photo)
 
-        GlideApp.with(this)
+        GlideApp.with(applicationContext)
                 .load((BinRepository().photoReference(binId!!)))
                 .into(binPhoto)
     }

@@ -1,5 +1,7 @@
 package com.application.seb.binfinder.models
 
+import com.google.firebase.firestore.GeoPoint
+
 data class CleanEvent(var eventId: String? = "",
                       var createDate: String = "",
                       var createBy_userName: String = "",
@@ -9,5 +11,6 @@ data class CleanEvent(var eventId: String? = "",
                       var description: String = "",
                       var title: String = "",
                       var address: String = "",
-                      var comments: MutableList<String>? = mutableListOf()
+                      var geoLocation : GeoPoint? = GeoPoint(0.0,0.0),
+                      var comments: MutableList<String>? = mutableListOf(),
                       )

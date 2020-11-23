@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 
     private fun showCleanEventFragment(){
         Log.d(TAG, "showCleanEventFragment()")
-        currentFragment = CleanEventFragment.newInstance("z", "&")
+        currentFragment = CleanEventFragment.newInstance(false)
         // Update fragment
         supportFragmentManager
                 .beginTransaction()
@@ -165,7 +165,11 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
             // "MY CLEAN EVENTS" -> CleanEventFragment()
             R.id.activity_main_drawer_my_clean_events -> {
                 Log.d(TAG, "Drawer menu -> click MY CLEAN EVENTS button")
-                // TODO : start clean event fragment
+                currentFragment = CleanEventFragment.newInstance(true)
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.activity_main_frameLayout, currentFragment)
+                        .commit()
             }
 
         }

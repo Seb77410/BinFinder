@@ -18,9 +18,13 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.controllers.activities.binDetails.BinDetailsActivity
+import com.application.seb.binfinder.controllers.activities.cleanEventDetails.CleanEventDetailsActivity
 import com.application.seb.binfinder.models.Bin
+import com.application.seb.binfinder.models.CleanEvent
 import com.application.seb.binfinder.repositories.BinRepository
+import com.application.seb.binfinder.repositories.CleanEventRepository
 import com.application.seb.binfinder.utils.Constants
+import com.application.seb.binfinder.utils.Utils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -52,12 +56,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var fabGreen: FloatingActionButton
     private lateinit var fabPlastic: FloatingActionButton
     private lateinit var fabRecyclingCenter: FloatingActionButton
-    private lateinit var fabWildDeposit: FloatingActionButton
+    private lateinit var fabCleanEvent: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var fabContainer : LinearLayout
     private lateinit var constraintLayout : ConstraintLayout
     private lateinit var userLocation : GeoPoint
-    private var locationsList : MutableList<Bin>? = mutableListOf()
+    private var locationsList : MutableList<Any>? = mutableListOf()
     private var markersList : MutableList<Marker>? = mutableListOf()
 
 
@@ -91,7 +95,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         fabGreen = rootView.findViewById(R.id.map_fragment_fab_green_waste)
         fabPlastic = rootView.findViewById(R.id.map_fragment_fab_plastic)
         fabRecyclingCenter = rootView.findViewById(R.id.map_fragment_fab_recycling_center)
-        fabWildDeposit = rootView.findViewById(R.id.map_fragment_fab_wild_deposit)
+        fabCleanEvent = rootView.findViewById(R.id.map_fragment_fab_clean_events)
         fabContainer = rootView.findViewById(R.id.map_fragment_fab_container)
         fabAdd = rootView.findViewById(R.id.map_fragment_fab_add)
         constraintLayout = rootView.findViewById(R.id.map_fragment_constraint_layout)
@@ -240,7 +244,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         fabGreen.setOnClickListener {getSelectedBinsList(getString(R.string.green_waste))}
         fabHousehold.setOnClickListener {getSelectedBinsList(getString(R.string.household_wast))}
         fabPlastic.setOnClickListener {getSelectedBinsList(getString(R.string.recycling_bin))}
-        fabWildDeposit.setOnClickListener {getSelectedBinsList(getString(R.string.wild_deposit))}
+        fabCleanEvent.setOnClickListener {getCleanEventsListList()}
         fabRecyclingCenter.setOnClickListener {getSelectedBinsList(getString(R.string.recycling_center))}
     }
 
@@ -264,17 +268,55 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 showMarker()
                 }
             }
-
     }
+
+    private fun getCleanEventsListList(){
+        val cleanEventRepository = CleanEventRepository()
+
+        cleanEventRepository.getCleanEventsByDistance(userLocation.latitude, userLocation.longitude).addSnapshotListener { _, mutableList, mutableList2 ->
+            Log.d(TAG, "Clean Events found = ${mutableList.size} and list2 = ${mutableList2.size} for type Clean Events")
+            // Clear data
+            locationsList!!.clear()
+            removeAllMarker()
+            // Add marker for asked bins
+            for (document in mutableList){
+                val cleanEvent = document.toObject(CleanEvent::class.java)
+                cleanEvent!!.eventId = document.id
+                locationsList!!.add(cleanEvent)
+                showMarker()
+            }
+        }
+    }
+
+
     private fun showMarker(){
-        for(bin in locationsList!!){
-            // Set marker options
-            val latLng = LatLng(bin.geoLocation!!.latitude ,bin.geoLocation!!.longitude)
-            val markerOptions = MarkerOptions().position(latLng)
-            val mMarker: Marker = googleMap!!.addMarker(markerOptions)
-            mMarker.tag = bin.binId
-            markersList!!.add(mMarker)
-            Log.d(TAG, "showMarker() for Bin id = " + bin.binId)
+        for(location in locationsList!!){
+            when(location){
+                is Bin -> {
+                    // Set marker options
+                    val latLng = LatLng(location.geoLocation!!.latitude ,location.geoLocation!!.longitude)
+                    val markerOptions = MarkerOptions().position(latLng)
+                    val mMarker: Marker = googleMap!!.addMarker(markerOptions)
+                    mMarker.title = location.type
+                    mMarker.tag = location.binId
+                    markersList!!.add(mMarker)
+                    Log.d(TAG, "showMarker() for Bin id = " + location.binId)
+                }
+                is CleanEvent -> {
+                    // Set marker options
+                    val latLng = LatLng(location.geoLocation!!.latitude ,location.geoLocation!!.longitude)
+                    val markerOptions = MarkerOptions().position(latLng)
+                    val mMarker: Marker = googleMap!!.addMarker(markerOptions)
+                    mMarker.title = "Clean Event"
+                    mMarker.tag = location.eventId
+                    markersList!!.add(mMarker)
+                    Log.d(TAG, "showMarker() for Event id = " + location.eventId)
+                }
+            }
+
+
+
+
         }
     }
 
@@ -286,10 +328,22 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onMarkerClick(p0: Marker?): Boolean {
         Log.d(TAG, "marker tag = " + p0!!.tag.toString())
         if (p0.tag != null) {
-            // Set marker place Id into string value
-            val intent = Intent(activity, BinDetailsActivity::class.java)
-            intent.putExtra(Constants.BIN_ID , p0.tag.toString())
-            startActivity(intent)
+            if(p0.title == "Clean Event") {
+                // Set marker place Id into string value
+                val intent = Intent(activity, CleanEventDetailsActivity::class.java)
+                CleanEventRepository().getCleanEventById(p0.tag.toString())
+                        .addOnSuccessListener {
+                            val cleanEvent = it.toObject(CleanEvent::class.java)
+                            intent.putExtra(Constants.ARGS_EVENT, Utils.convertCleanEventToString(cleanEvent!!))
+                            startActivity(intent)
+                        }
+            }
+            else{
+                // Set marker place Id into string value
+                val intent = Intent(activity, BinDetailsActivity::class.java)
+                intent.putExtra(Constants.BIN_ID, p0.tag.toString())
+                startActivity(intent)
+            }
         }
         return true
     }

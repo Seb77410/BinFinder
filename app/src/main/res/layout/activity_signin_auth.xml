@@ -75,19 +75,7 @@
         android:layout_marginBottom="30dp"
         />
 
-    <Button
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:id="@+id/sign_in_activity_skip_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_in_skip"
-        app:backgroundTint="@color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@android:color/white"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

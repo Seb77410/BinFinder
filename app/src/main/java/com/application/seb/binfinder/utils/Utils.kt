@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.controllers.activities.MainActivity
@@ -20,7 +19,6 @@ import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val TAG = "Utils"
 
 class Utils {
 
@@ -71,7 +69,6 @@ class Utils {
             val dayOfMonth = convertDateIntToString(calendar[Calendar.DAY_OF_MONTH])
             val month = convertDateIntToString(calendar[Calendar.MONTH] + 1)
             val year = calendar[Calendar.YEAR].toString()
-            Log.e(TAG, "format date : $year$month$dayOfMonth")
             return "$year$month$dayOfMonth"
         }
 
@@ -89,9 +86,9 @@ class Utils {
 
             val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
             val newSdf = SimpleDateFormat("dd / MM / yyyy", Locale.getDefault())
-            val mDate : Date = sdf.parse(date.toString())!!
+            val mDate : Date = sdf.parse((date).toString())!!
             val formatDate = newSdf.format(mDate)
-            Log.e(TAG, " convertDataDateToFormatString($mDate) = $formatDate ")
+
             return formatDate
 
         }

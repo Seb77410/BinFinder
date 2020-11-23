@@ -2,13 +2,16 @@ package com.application.seb.binfinder.controllers.activities.cleanEventDetails
 
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -16,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.seb.binfinder.R
+import com.application.seb.binfinder.controllers.activities.MainActivity
 import com.application.seb.binfinder.controllers.activities.addCleanEvent.AddCleanEventActivity
 import com.application.seb.binfinder.models.CleanEvent
 import com.application.seb.binfinder.repositories.CleanEventRepository
@@ -50,7 +54,6 @@ class CleanEventDetailsActivity : AppCompatActivity() {
     private lateinit var adapter: CleanEventCommentsAdapter
     private val cleanEventRepository = CleanEventRepository()
     private val commentRepository = CommentRepository()
-
 
 //--------------------------------------------------------------------------------------------------
 // On Create
@@ -105,6 +108,12 @@ class CleanEventDetailsActivity : AppCompatActivity() {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(upArrow)
             actionBar.setDisplayHomeAsUpEnabled(true)
+            toolbar.setNavigationOnClickListener {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                    finish()
+            }
         }
         configureMenu()
     }
@@ -132,10 +141,11 @@ class CleanEventDetailsActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         return if(event.createBy_userId == FirebaseAuth.getInstance().uid){
-            menuInflater.inflate(R.menu.clean_event_details_menu, menu)
+            menuInflater.inflate(R.menu.menu_clean_event_details, menu)
             true
         }
         else {
@@ -160,6 +170,9 @@ class CleanEventDetailsActivity : AppCompatActivity() {
                                                     commentRepository.deleteComment(commentId)
                                                     Log.d(TAG, "clean event comment (id: $commentId) successful delete")
                                                 }
+                                                Utils.startNotification(getString(R.string.notification_title_clean_event_delete), getString(R.string.notification_content_clean_event_delete), this)
+                                                val intent = Intent(this, MainActivity::class.java)
+                                                startActivity(intent)
                                             }
                                         }
                             }
@@ -220,15 +233,15 @@ class CleanEventDetailsActivity : AppCompatActivity() {
         if (event.participants!!.contains(FirebaseAuth.getInstance().uid!!)){
             buttonIsClicked = true
             participateButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorAccentTransparent))
-            Log.e(TAG,"Participate button is clicked = $buttonIsClicked")
+            Log.e(TAG, "Participate button is clicked = $buttonIsClicked")
         }else{
             buttonIsClicked = false
             participateButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
-            Log.e(TAG,"Participate button is clicked = $buttonIsClicked")
+            Log.e(TAG, "Participate button is clicked = $buttonIsClicked")
         }
 
         participateButton.setOnClickListener{
-            Log.e(TAG,"Participate button just clicked")
+            Log.e(TAG, "Participate button just clicked")
             when (buttonIsClicked){
                 true -> {
                     cleanEventRepository.removeParticipantToCleanEvent(event.eventId!!, FirebaseAuth.getInstance().uid!!)
@@ -236,7 +249,7 @@ class CleanEventDetailsActivity : AppCompatActivity() {
                                 participateButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.transparent))
                                 event.participants!!.remove(FirebaseAuth.getInstance().uid!!)
                                 setParticipantsNumber()
-                                Log.e(TAG,"if button was yet clicked")
+                                Log.e(TAG, "if button was yet clicked")
                                 buttonIsClicked = false
                             }
                 }
@@ -262,13 +275,13 @@ class CleanEventDetailsActivity : AppCompatActivity() {
             if(comment != ""){
                 // Create document in FireStore data base
                 commentRepository.createComment(FirebaseAuth.getInstance().uid!!, FirebaseAuth.getInstance().currentUser!!.displayName!!, comment, Utils.convertCalendarToFormatString(Calendar.getInstance())!!)
-                        .addOnSuccessListener {doc ->
+                        .addOnSuccessListener { doc ->
                                 // Update comment id
                                 commentRepository.updateCommentId(doc.id)
                                         .addOnSuccessListener {
                                             // Update event comments list
                                             cleanEventRepository.updateCommentsList(event.eventId!!, doc.id)
-                                            event.comments!!.add(0,doc.id)
+                                            event.comments!!.add(0, doc.id)
                                             adapter.notifyDataSetChanged()
                                             Log.e(TAG, "Comment save, comments size = ${event.comments?.size}")
                                         }

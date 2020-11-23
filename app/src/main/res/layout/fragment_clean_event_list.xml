@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".controllers.fragments.cleanEventList.CleanEventListFragment">
+    tools:context=".controllers.fragments.cleanEventList.CleanEventListFragment"
+    android:id="@+id/fragment_clean_event_list"
+    >
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -96,12 +98,12 @@
                     android:layout_marginEnd="10dp"
                     android:background="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/clean_event_details_activity_participants_details_title"
+                    app:layout_constraintEnd_toStartOf="@+id/clean_event_details_activity_details_title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/clean_event_details_activity_participants_details_title"
+                    android:id="@+id/clean_event_details_activity_details_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/participate"
@@ -122,7 +124,7 @@
                     android:background="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/clean_event_details_activity_participants_details_title"
+                    app:layout_constraintStart_toEndOf="@+id/clean_event_details_activity_details_title"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,10 +136,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clean_event_list_fragment_participate_list_title_container"
+                app:layout_constraintBottom_toTopOf="@+id/bottomView"
                 android:visibility="visible"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                />
+
+            <TextView
+                android:id="@+id/bottomView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.core.widget.NestedScrollView>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_filter_black_48dp"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="55dp"
             android:rotation="90"
             />
 
@@ -89,13 +90,13 @@
                 app:srcCompat="@drawable/ic_recycling_center" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/map_fragment_fab_wild_deposit"
+                android:id="@+id/map_fragment_fab_clean_events"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_landfill" />
+                app:srcCompat="@drawable/ic_clean_event" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -9,7 +9,7 @@ import com.application.seb.binfinder.controllers.fragments.cleanEventList.CleanE
 
 private const val PAGE_NUMBER = 2
 
-class PageAdapter(mgr: FragmentManager?, var context: Context) : FragmentStatePagerAdapter(mgr!!) {
+class PageAdapter(fragmentManager: FragmentManager?, var context: Context) : FragmentStatePagerAdapter(fragmentManager!!, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int { return PAGE_NUMBER }
 

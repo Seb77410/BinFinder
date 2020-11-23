@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controllers.fragments.addBin.AddBinFragment">
+    tools:context=".controllers.fragments.addBin.AddBinFragment"
+    android:id="@+id/fragment_add_bin"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/add_bin_fragment_constraintLayout"
@@ -28,19 +30,21 @@
                 >
                 <androidx.cardview.widget.CardView
                     android:id="@+id/add_bin_fragment_cardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="10dp"
+                    android:layout_gravity="center"
                     app:layout_constraintBottom_toTopOf="@+id/add_bin_fragment_guideline"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp"
                     >
 
                     <ImageButton
                         android:id="@+id/add_bin_fragment_imageView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
                         android:background="?attr/selectableItemBackground"
                         android:src="@drawable/add_photo"
                         android:scaleType="fitCenter"
@@ -128,7 +132,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="50dp"
             app:srcCompat="@drawable/ic_save"
             app:backgroundTint="@color/colorPrimary"
             />

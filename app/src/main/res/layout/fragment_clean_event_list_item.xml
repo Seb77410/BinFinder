@@ -16,6 +16,7 @@
     android:layout_marginStart="10dp"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="10dp"
+    android:id="@+id/fragment_clean_event_list_item"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,18 +53,17 @@
 
                 <TextView
                     android:id="@+id/clean_event_frag_item_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
                     android:background="@color/blackTransparent"
-                    app:backgroundTint="@color/blackTransparent"
+                    android:gravity="center"
                     android:textColor="@android:color/white"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:backgroundTint="@color/blackTransparent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_goneMarginEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
 
-                    />
+                    app:layout_goneMarginEnd="10dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

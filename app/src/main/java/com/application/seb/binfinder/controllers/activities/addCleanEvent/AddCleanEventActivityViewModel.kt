@@ -12,6 +12,7 @@ import com.application.seb.binfinder.utils.Constants
 import com.application.seb.binfinder.utils.Utils
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.UploadTask
 import java.io.ByteArrayOutputStream
 
@@ -23,8 +24,8 @@ class AddCleanEventActivityViewModel: ViewModel() {
     private var photoData = ByteArray(0)
 
 
-    fun saveCleanEventToFireStore(createDate: String, createUserName: String , createUserId: String, date: Int, participants: MutableList<String>?, description: String ,title: String, address: String): Task<DocumentReference> {
-        return cleanEventRepository.createCleanEvent(createDate, createUserName, createUserId, date, participants, description, title, address)
+    fun saveCleanEventToFireStore(createDate: String, createUserName: String , createUserId: String, date: Int, participants: MutableList<String>?, description: String ,title: String, address: String, geoLocation: GeoPoint?): Task<DocumentReference> {
+        return cleanEventRepository.createCleanEvent(createDate, createUserName, createUserId, date, participants, description, title, address, geoLocation)
     }
 
     fun updateCleanEventId(eventId: String): Task<Nothing> {

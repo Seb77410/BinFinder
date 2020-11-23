@@ -13,43 +13,42 @@ import com.application.seb.binfinder.controllers.activities.addCleanEvent.AddCle
 import com.application.seb.binfinder.utils.PageAdapter
 import com.google.android.material.tabs.TabLayout
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "showUserCleanEvents"
 private const val TABS_NUMBER = 2
+private const val TABS_USER_CLEAN_EVENTS_INDEX = 1
+
 
 
 class CleanEventFragment : Fragment() {
-    //--------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------
 // For data
 //--------------------------------------------------------------------------------------------------
-    private var param1: String? = null
-    private var param2: String? = null
+    private var showUserCleanEvents: Boolean = false
     private lateinit var pager: ViewPager
     private lateinit var tabs: TabLayout
     private lateinit var addButton: ImageButton
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------------------------------
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(showUserCleanEvents: Boolean) =
                 CleanEventFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+                        putBoolean(ARG_PARAM1, showUserCleanEvents)
                     }
                 }
     }
 
-    //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // On Create
 //--------------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            showUserCleanEvents = it.getBoolean(ARG_PARAM1)
         }
     }
 
@@ -63,6 +62,7 @@ class CleanEventFragment : Fragment() {
 
         configureViewPagerAndTabs()
         configureAddButton()
+        setDefaultView()
         return rootView
 
     }
@@ -95,4 +95,16 @@ class CleanEventFragment : Fragment() {
         }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Default view
+//--------------------------------------------------------------------------------------------------
+
+    private fun setDefaultView(){
+
+        if(showUserCleanEvents){
+            val tab : TabLayout.Tab? = tabs.getTabAt(TABS_USER_CLEAN_EVENTS_INDEX)
+            tab!!.select()
+        }
+
+    }
 }

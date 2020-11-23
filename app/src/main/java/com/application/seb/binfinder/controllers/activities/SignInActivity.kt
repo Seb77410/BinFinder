@@ -27,7 +27,7 @@ class SignInActivity : AppCompatActivity() {
 
         if (FirebaseAuth.getInstance().currentUser != null) {
             Log.d(TAG, FirebaseAuth.getInstance().currentUser.toString())
-            val intent = Intent(applicationContext, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         } else {
             this.startSignInActivity()
@@ -43,7 +43,7 @@ class SignInActivity : AppCompatActivity() {
         val providers = arrayListOf(
                 AuthUI.IdpConfig.GoogleBuilder().build(),
                 AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.AnonymousBuilder().build())
+        )
 
         val builder = AuthUI.getInstance().createSignInIntentBuilder()
 
@@ -51,7 +51,6 @@ class SignInActivity : AppCompatActivity() {
                 .Builder(R.layout.activity_signin_auth)
                 .setGoogleButtonId(R.id.sign_in_activity_google_button)
                 .setEmailButtonId(R.id.sign_in_activity_mail_button)
-                .setAnonymousButtonId(R.id.sign_in_activity_skip_button)
                 .build()
 
         startActivityForResult(
@@ -72,8 +71,8 @@ class SignInActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
+
             val response = IdpResponse.fromResultIntent(data)
-            // ERRORS
             if (resultCode == Activity.RESULT_OK) {
                 createUser()
             } else when {
@@ -103,9 +102,10 @@ class SignInActivity : AppCompatActivity() {
         val userRepository = UserRepository()
         userRepository.getUser(FirebaseAuth.getInstance().currentUser!!.uid)!!
                 .addOnCompleteListener { task ->
+
                     if (task.isSuccessful) {
                         val document = task.result
-                        if (document == null) {Log.e("SignIn", "User document is NULL")}
+                        if (document == null) {Log.e(TAG, "User document is NULL")}
                         else {
                             Log.d(TAG, "User document is NOT NULL")
                             if (document.exists()) {
@@ -122,12 +122,15 @@ class SignInActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    else {Log.e("SignIn", "User NOT CREATE")}
+
+                    else {
+                        Log.e(TAG, "ERROR to get currentUser")
+                    }
                 }
     }
 
     private fun startMainActivity(){
-        val intent = Intent(applicationContext, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 

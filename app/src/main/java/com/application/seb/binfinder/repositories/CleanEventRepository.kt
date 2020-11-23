@@ -1,7 +1,12 @@
 package com.application.seb.binfinder.repositories
 
+import android.location.Location
 import android.net.Uri
 import com.application.seb.binfinder.models.CleanEvent
+import com.application.seb.binfinder.utils.Constants
+import com.ckdroid.geofirequery.GeoQuery
+import com.ckdroid.geofirequery.model.Distance
+import com.ckdroid.geofirequery.utils.BoundingBoxUtils
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
@@ -16,6 +21,9 @@ private const val CREATOR_ID = "createBy_userId"
 private const val PARTICIPANTS = "participants"
 private const val EVENT_ID = "eventId"
 private const val COMMENTS = "comments"
+private const val LOCATION = "myLocation"
+private const val MAX_DISTANCE_SEARCH = 10000.0
+private const val MAP_EVENT_MAX_LIMIT = 10
 
 
 class CleanEventRepository {
@@ -35,8 +43,8 @@ class CleanEventRepository {
 //--------------------------------------------------------------------------------------------------
 // Create
 //--------------------------------------------------------------------------------------------------
-    fun createCleanEvent(createDate: String, createUserName: String , createUserId: String,date: Int, participants: MutableList<String>?, description: String ,title: String, address: String): Task<DocumentReference> {
-        val cleanEvent = CleanEvent(null, createDate, createUserName, createUserId,date, participants, description, title, address)
+    fun createCleanEvent(createDate: String, createUserName: String , createUserId: String,date: Int, participants: MutableList<String>?, description: String ,title: String, address: String, geoLocation: GeoPoint?): Task<DocumentReference> {
+        val cleanEvent = CleanEvent(null, createDate, createUserName, createUserId,date, participants, description, title, address, geoLocation)
         return cleanEventCollection().add(cleanEvent)
     }
 
@@ -52,8 +60,24 @@ class CleanEventRepository {
         return photoReference(cleanEventId).downloadUrl
     }
 
+    fun getCleanEventsByDistance(lat: Double, long: Double): GeoQuery {
+        val centerLocation = Location(LOCATION)
+        centerLocation.latitude = lat
+        centerLocation.longitude = long
+        val distanceForRadius = Distance(MAX_DISTANCE_SEARCH, BoundingBoxUtils.DistanceUnit.KILOMETERS)
+
+        return GeoQuery()
+                .collection(CLEAN_EVENT_COLLECTION_REFERENCE)
+                .whereNearToLocation(centerLocation, distanceForRadius)
+                .limit(MAP_EVENT_MAX_LIMIT.toLong())
+    }
+
+    fun getCleanEventById(eventId: String): Task<DocumentSnapshot> {
+        return cleanEventCollection().document(eventId).get()
+    }
+
     fun getCleanEventByDate(currentFormatDate: String): Task<QuerySnapshot> {
-        return cleanEventCollection().whereGreaterThanOrEqualTo(EVENT_DATE, currentFormatDate.toInt()).limit(LIST_LIMIT).orderBy("eventDate", Query.Direction.ASCENDING).get()
+        return cleanEventCollection().whereGreaterThanOrEqualTo(EVENT_DATE, currentFormatDate.toInt()).limit(LIST_LIMIT).orderBy(Constants.CLEAN_EVENT_EVENT_DATE, Query.Direction.ASCENDING).get()
     }
 
     fun getCleanEventByCreateUserId(userId: String): Task<QuerySnapshot> {
