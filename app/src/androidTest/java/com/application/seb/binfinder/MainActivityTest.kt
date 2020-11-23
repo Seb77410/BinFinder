@@ -35,7 +35,6 @@ class MainActivityTest {
         // Base view
         onView(withId(R.id.fragment_map)).check(matches(isDisplayed()))
         onView(withId(R.id.map_fragment_constraint_layout)).check(matches(isDisplayed()))
-        onView(withId(R.id.map)).check(matches(isDisplayed()))
         onView(withId(R.id.map_fragment_fab_container)).check(matches(Matchers.not(isDisplayed())))
         onView(withId(R.id.map_fragment_fab_menu)).check(matches(isDisplayed()))
 
@@ -57,13 +56,13 @@ class MainActivityTest {
         onView(withId(R.id.add_bin_fragment_constraintLayout)).check(matches(isDisplayed()))
         onView(withId(R.id.add_bin_fragment_cardView)).check(matches(isDisplayed()))
         onView(withId(R.id.add_bin_fragment_imageView)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_type_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_household_waste)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_plastic)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_glass)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_green_waste)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_wild_deposit)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_recycling_center)).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_type_title)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_household_waste)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_plastic)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_glass)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_green_waste)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_wild_deposit)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_recycling_center)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
 
         // Save button and no photo alert dialog tests
         onView(withId(R.id.add_bin_fragment_save_button)).check(matches(isDisplayed())).perform(click())
@@ -71,12 +70,12 @@ class MainActivityTest {
         onView(withText(R.string.alert_dialog_ok_button)).check(matches(isDisplayed())).perform(click())
 
         // Radio buttons selection tests
-        onView(withId(R.id.add_bin_fragment_radioButton_household_waste)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_plastic)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_glass)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_green_waste)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_wild_deposit)).check(matches(isDisplayed()))
-        onView(withId(R.id.add_bin_fragment_radioButton_recycling_center)).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_household_waste)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_plastic)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_glass)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_green_waste)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_wild_deposit)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
+        onView(withId(R.id.add_bin_fragment_radioButton_recycling_center)).perform(NestedScrollViewExtension()).check(matches(isDisplayed()))
     }
 
     @Test

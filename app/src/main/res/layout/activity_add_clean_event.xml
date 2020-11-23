@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Add clean event"
+        app:title="@string/add_clean_event_activity_title"
         app:titleTextColor="@android:color/white"
         android:background="@color/colorPrimary"
         />
@@ -55,7 +55,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
 
-                android:id="@+id/add_clean_event_activity_title"
+                android:id="@+id/add_clean_event_activity_title_value"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 android:hint="@string/address"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_clean_event_activity_title">
+                app:layout_constraintTop_toBottomOf="@+id/add_clean_event_activity_title_value">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
