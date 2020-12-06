@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.activities.cleanEventDetails
+package com.application.seb.binfinder.controllers.activities
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -19,8 +19,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.activities.MainActivity
-import com.application.seb.binfinder.controllers.activities.addCleanEvent.AddCleanEventActivity
+import com.application.seb.binfinder.views.CleanEventCommentsAdapter
 import com.application.seb.binfinder.models.CleanEvent
 import com.application.seb.binfinder.repositories.CleanEventRepository
 import com.application.seb.binfinder.repositories.CommentRepository
@@ -171,7 +170,11 @@ class CleanEventDetailsActivity : AppCompatActivity() {
                                                     Log.d(TAG, "clean event comment (id: $commentId) successful delete")
                                                 }
                                                 Utils.startNotification(getString(R.string.notification_title_clean_event_delete), getString(R.string.notification_content_clean_event_delete), this)
-                                                val intent = Intent(this, MainActivity::class.java)
+                                                val intent = Intent(applicationContext, MainActivity::class.java)
+                                                startActivity(intent)
+                                            }else{
+                                                Utils.startNotification(getString(R.string.notification_title_clean_event_delete), getString(R.string.notification_content_clean_event_delete), this)
+                                                val intent = Intent(applicationContext, MainActivity::class.java)
                                                 startActivity(intent)
                                             }
                                         }

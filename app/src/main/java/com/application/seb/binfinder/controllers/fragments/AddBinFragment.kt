@@ -1,9 +1,10 @@
-package com.application.seb.binfinder.controllers.fragments.addBin
+package com.application.seb.binfinder.controllers.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -17,11 +18,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.models.Bin
+import com.application.seb.binfinder.repositories.BinRepository
 import com.application.seb.binfinder.utils.Constants
 import com.application.seb.binfinder.utils.Utils
 import com.ckdroid.geofirequery.setLocation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
 import java.util.*
 
     private const val TAG = "AddBinFragment"
@@ -37,7 +41,7 @@ class AddBinFragment : Fragment() {
     private lateinit var imageButton: ImageButton
     private var userTakePhoto = false
     private lateinit var radioGroup: RadioGroup
-    private lateinit var addBinFragmentViewModel: AddBinFragmentViewModel
+    private var photoData = ByteArray(0)
 
     interface OnFragmentInteractionListener { fun binSaved(binType: String) }
 
@@ -73,7 +77,6 @@ class AddBinFragment : Fragment() {
         fabSave = rootView.findViewById(R.id.add_bin_fragment_save_button)
         imageButton = rootView.findViewById(R.id.add_bin_fragment_imageView)
         radioGroup = rootView.findViewById(R.id.add_bin_fragment_radioGroup)
-        addBinFragmentViewModel = AddBinFragmentViewModel()
 
         configureImageButton()
         configureSaveButton()
@@ -129,12 +132,12 @@ class AddBinFragment : Fragment() {
         val userName = FirebaseAuth.getInstance().currentUser!!.displayName
         // Create Bin
         val bin = Bin(null, binType, Utils.convertStringToGeoPoint(location!!), userId, userName!!)
-        addBinFragmentViewModel.saveBinToFirebase(bin)
+        BinRepository().createBin(bin.type, bin.geoLocation, bin.addBy_userID, bin.addBy_userName)
                 .addOnSuccessListener { document ->
                     Log.d(TAG, "Bin create successful")
                     document.setLocation(bin.geoLocation!!.latitude, bin.geoLocation!!.longitude)
 
-                    addBinFragmentViewModel.savePhotoToFirebase(imageButton, document.id)
+                    savePhotoToFirebase(imageButton, document.id)
                             .addOnSuccessListener {
                                 // Start notification
                                 Utils.startNotification(getString(R.string.notification_title_bin_save), getString(R.string.notification_content_bin_save), context!!)
@@ -145,6 +148,20 @@ class AddBinFragment : Fragment() {
                             .addOnFailureListener {Log.e(TAG, "Photo upload failed")}
                 }
                 .addOnFailureListener {Log.e(TAG, "Bin create failed")}
+    }
+
+    private fun savePhotoToFirebase(imageButton: ImageButton, binId: String): UploadTask {
+        photoData = uploadBitmap(imageButton)
+        return BinRepository().uploadPhoto(binId, photoData)
+    }
+
+    private fun uploadBitmap(imageButton: ImageButton): ByteArray {
+        imageButton.isDrawingCacheEnabled = true
+        imageButton.buildDrawingCache()
+        val bitmap = (imageButton.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        return baos.toByteArray()
     }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,4 +189,9 @@ class AddBinFragment : Fragment() {
             userTakePhoto = true
         }
     }
+
+
+
+
+
 }

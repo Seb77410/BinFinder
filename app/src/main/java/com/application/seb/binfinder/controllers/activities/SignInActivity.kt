@@ -117,7 +117,7 @@ class SignInActivity : AppCompatActivity() {
                                 userRepository
                                         .createUser(FirebaseAuth.getInstance().currentUser!!.uid,
                                             FirebaseAuth.getInstance().currentUser!!.displayName!!,
-                                            FirebaseAuth.getInstance().currentUser?.photoUrl )!!
+                                            FirebaseAuth.getInstance().currentUser?.photoUrl.toString() )!!
                                         .addOnSuccessListener {startMainActivity()}
                             }
                         }

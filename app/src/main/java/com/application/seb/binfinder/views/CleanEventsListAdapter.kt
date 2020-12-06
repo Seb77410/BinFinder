@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.fragments.cleanEventList
+package com.application.seb.binfinder.views
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.activities.cleanEventDetails.CleanEventDetailsActivity
+import com.application.seb.binfinder.controllers.activities.CleanEventDetailsActivity
 import com.application.seb.binfinder.models.CleanEvent
 import com.application.seb.binfinder.repositories.CleanEventRepository
 import com.application.seb.binfinder.utils.Constants

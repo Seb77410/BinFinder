@@ -1,9 +1,11 @@
-package com.application.seb.binfinder.controllers.activities.addCleanEvent
+package com.application.seb.binfinder.controllers.activities
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -23,16 +25,19 @@ import com.application.seb.binfinder.utils.GlideApp
 import com.application.seb.binfinder.utils.Service
 import com.application.seb.binfinder.utils.Utils
 import com.ckdroid.geofirequery.setLocation
+import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.storage.UploadTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 private const val REQUEST_IMAGE_CAPTURE = 1
@@ -59,12 +64,12 @@ class AddCleanEventActivity : AppCompatActivity() {
     private var address: String? = null
     private var description: String? = null
     private var userTakePhoto = false
-    private var model = AddCleanEventActivityViewModel()
 
     private var activityIsForEventEdit = false
 
+    private var photoData = ByteArray(0)
 
-//--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
 // On Create
 //--------------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -199,12 +204,11 @@ class AddCleanEventActivity : AppCompatActivity() {
 //--------------------------------------------------------------------------------------------------
 
     private fun configureSaveButton(){
-
         saveButton.setOnClickListener{
             if(checkForErrors()){
                 when(activityIsForEventEdit){
                     true -> { updateCleanEvent() }
-                    false -> { saveCleanEventInstance() }
+                    false -> { saveCleanEvent() }
                 }
             }else{
                 Log.e(TAG, "checkForError not passed")
@@ -213,7 +217,7 @@ class AddCleanEventActivity : AppCompatActivity() {
     }
 
 
-    private fun saveCleanEventInstance(){
+    private fun saveCleanEvent(){
         val createDate = Utils.convertCalendarToFormatString(Calendar.getInstance())
         val createBy = FirebaseAuth.getInstance().currentUser!!.displayName!!
         val participants : MutableList<String> = mutableListOf()
@@ -225,11 +229,11 @@ class AddCleanEventActivity : AppCompatActivity() {
                     val lat = response.body()!!.results[0].geometry.location.lat
                     val lng = response.body()!!.results[0].geometry.location.lng
                     val geoPoint = GeoPoint(lat, lng)
-                    model.saveCleanEventToFireStore(createDate.toString(), createBy, FirebaseAuth.getInstance().uid!!, eventDate, participants, description.toString(), title.toString(), address.toString(), geoPoint)
+                    CleanEventRepository().createCleanEvent(createDate.toString(), createBy, FirebaseAuth.getInstance().uid!!, eventDate, participants, description.toString(), title.toString(), address.toString(), geoPoint)
                             .addOnSuccessListener { doc ->
-                                model.updateCleanEventId(doc.id).addOnSuccessListener {
+                                CleanEventRepository().updateCleanEventId(doc.id).addOnSuccessListener {
                                     doc.setLocation(lat, lng).addOnSuccessListener {
-                                        model.savePhotoToFirebase(imageButton, doc.id)
+                                        savePhotoToFirebase(imageButton, doc.id)
                                                 .addOnSuccessListener {
                                                     Log.d(TAG, "Clean Event photo Save")
                                                     Utils.startNotification(getString(R.string.notification_title_clean_event_save), getString(R.string.notification_content_clean_event_save), applicationContext)
@@ -249,7 +253,7 @@ class AddCleanEventActivity : AppCompatActivity() {
 
     private fun updateCleanEvent(){
         Log.d(TAG, "updateCleanEvent()")
-        model.updateCleanEventForEdit(event, getTextFromInputLayout(titleLayout)!!,eventDate, getTextFromInputLayout(addressLayout)!!, getTextFromInputLayout(descriptionLayout)!!, imageButton, this)
+        updateCleanEventData(event, getTextFromInputLayout(titleLayout)!!,eventDate, getTextFromInputLayout(addressLayout)!!, getTextFromInputLayout(descriptionLayout)!!, imageButton, this)
     }
 
     private fun convertAddressToLatLng(): Call<GeocodeResponse?>? {
@@ -266,6 +270,39 @@ class AddCleanEventActivity : AppCompatActivity() {
 
     }
 
+    private fun savePhotoToFirebase(imageButton: ImageButton, cleanEventId: String): UploadTask {
+        photoData = uploadBitmap(imageButton)
+        return CleanEventRepository().uploadPhoto(cleanEventId, photoData)
+    }
+
+    private fun uploadBitmap(imageButton: ImageButton): ByteArray {
+        imageButton.isDrawingCacheEnabled = true
+        imageButton.buildDrawingCache()
+        val bitmap = (imageButton.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        return baos.toByteArray()
+    }
+
+    private fun updateCleanEventData(currentCleanEvent: CleanEvent, newTitle: String, newEventDate: Int, newAddress: String, newDescription: String, photoContainer: ImageButton, context: Context): Task<Void> {
+        val data: MutableMap<String, Any> = mutableMapOf()
+        if(newTitle != currentCleanEvent.title){ data[Constants.CLEAN_EVENT_TITLE] = newTitle }
+        if(newEventDate != currentCleanEvent.eventDate){data[Constants.CLEAN_EVENT_EVENT_DATE] = newEventDate }
+        if(newAddress != currentCleanEvent.address){data[Constants.CLEAN_EVENT_ADDRESS] = newAddress }
+        if(newDescription != currentCleanEvent.description){data[Constants.CLEAN_EVENT_DESCRIPTION] = newDescription }
+
+        return CleanEventRepository().updateSomeEventData(currentCleanEvent.eventId!!, data).addOnSuccessListener {
+            photoData = uploadBitmap(photoContainer)
+            CleanEventRepository().deletePhoto(currentCleanEvent.eventId!!).addOnSuccessListener {
+                CleanEventRepository().uploadPhoto(currentCleanEvent.eventId!!, photoData)
+                        .addOnSuccessListener {
+                            Utils.startNotification(context.getString(R.string.notification_title_clean_event_update),context.getString(R.string.notification_title_clean_event_update), context)
+                        }
+            }
+
+        }
+
+    }
 
 //--------------------------------------------------------------------------------------------------
 // Error check
@@ -329,6 +366,13 @@ class AddCleanEventActivity : AppCompatActivity() {
         }
         else{ false }
     }
+
+
+
+
+
+
+
 
 
 }

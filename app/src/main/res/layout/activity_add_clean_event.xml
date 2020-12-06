@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controllers.activities.addCleanEvent.AddCleanEventActivity">
+    tools:context=".controllers.activities.AddCleanEventActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/add_clean_event_activity_toolbar"

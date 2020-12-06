@@ -23,7 +23,7 @@ class UserRepository {
 //--------------------------------------------------------------------------------------------------
 // Create
 //--------------------------------------------------------------------------------------------------
-    fun createUser(userId: String, username: String, urlPicture: Uri?): Task<Void?>? {
+    fun createUser(userId: String, username: String, urlPicture: String?): Task<Void?>? {
         val userToCreate = User(userId, username, urlPicture, null)
         return usersCollection()!!.document(userId).set(userToCreate)
     }

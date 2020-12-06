@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.activities.binDetails
+package com.application.seb.binfinder.controllers.activities
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -17,13 +17,16 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.application.seb.binfinder.BuildConfig
 import com.application.seb.binfinder.R
 import com.application.seb.binfinder.models.Bin
-import com.application.seb.binfinder.models.BinWaste
+import com.application.seb.binfinder.models.BinContent
 import com.application.seb.binfinder.models.GeocodeResponse
 import com.application.seb.binfinder.models.User
 import com.application.seb.binfinder.repositories.BinRepository
+import com.application.seb.binfinder.repositories.BinContentRepository
+import com.application.seb.binfinder.repositories.UserRepository
 import com.application.seb.binfinder.utils.Constants
 import com.application.seb.binfinder.utils.GlideApp
 import com.application.seb.binfinder.utils.Service
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,7 +41,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 private lateinit var mToolbar :Toolbar
 private lateinit var binPhoto : ImageView
 private var binId : String? = null
-private lateinit var viewModel : BinDetailsActivityViewModel
 private lateinit var bin: Bin
 private lateinit var likeButton: Button
 private lateinit var dislikeButton: Button
@@ -91,15 +93,14 @@ class BinDetailsActivity : AppCompatActivity() {
     }
 
     private fun getBinData(){
-        viewModel = BinDetailsActivityViewModel()
-        viewModel.getBinData(binId!!).addOnSuccessListener { mBin ->
+        BinRepository().getBinById(binId!!).addOnSuccessListener { mBin ->
             bin = mBin.toObject(Bin::class.java)!!
             getUserData()
         }
     }
 
     private fun getUserData(){
-        viewModel.getUser()!!.addOnSuccessListener { document ->
+        UserRepository().getUser(FirebaseAuth.getInstance().currentUser!!.uid)!!.addOnSuccessListener { document ->
             user = document!!.toObject(User::class.java)!!
 
             configureToolbar()
@@ -110,7 +111,6 @@ class BinDetailsActivity : AppCompatActivity() {
             setAddress()
             setBinWasteContent()
         }
-
     }
 //--------------------------------------------------------------------------------------------------
 // Toolbar
@@ -162,11 +162,11 @@ class BinDetailsActivity : AppCompatActivity() {
                 likeButtonIsCheck = true
                 dislikeButtonIsCheck = false
                 // Update bin data
-                viewModel.updateBinLike(binId!!, 1)
+                BinRepository().updateBinLike(binId!!, 1)
                 // Update User data
                 if(user.likedBinsList == null){ user.likedBinsList = mutableMapOf() }
                 user.likedBinsList!![binId!!] = Constants.BIN_LIKE
-                viewModel.updateUser(user)
+                UserRepository().updateUserLikedBinsList(user)
                 // Update likes buttons colors
                 DrawableCompat.setTint(likeButtonDrawable, Color.GREEN)
                 DrawableCompat.setTint(dislikeButtonDrawable,  ContextCompat.getColor(applicationContext, R.color.grey) )
@@ -181,11 +181,11 @@ class BinDetailsActivity : AppCompatActivity() {
                 dislikeButtonIsCheck = true
                 likeButtonIsCheck = false
                 // Update bin data
-                viewModel.updateBinLike(binId!!, -1)
+                BinRepository().updateBinLike(binId!!, -1)
                 // Update User data
                 if(user.likedBinsList == null){ user.likedBinsList = mutableMapOf() }
                 user.likedBinsList!![binId!!] = Constants.BIN_DISLIKE
-                viewModel.updateUser(user)
+                UserRepository().updateUserLikedBinsList(user)
                 // Update likes buttons colors
                 DrawableCompat.setTint(dislikeButtonDrawable, Color.RED)
                 DrawableCompat.setTint(likeButtonDrawable,  ContextCompat.getColor(applicationContext, R.color.grey))
@@ -255,8 +255,8 @@ class BinDetailsActivity : AppCompatActivity() {
 
     private fun setBinWasteContent(){
 
-        viewModel.getBinWasteById(bin.type).addOnSuccessListener { document ->
-           val binWaste: BinWaste = document.toObject(BinWaste::class.java)!!
+        BinContentRepository().getBinContentByID(bin.type).addOnSuccessListener { document ->
+            val binWaste: BinContent = document.toObject(BinContent::class.java)!!
             addressComment.text = binWaste.comment
 
             if(binWaste.wastes != null){
@@ -271,7 +271,6 @@ class BinDetailsActivity : AppCompatActivity() {
                 wasteContent.visibility = View.GONE
             }
         }
-
     }
 }
 

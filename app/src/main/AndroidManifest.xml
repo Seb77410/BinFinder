@@ -36,17 +36,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controllers.activities.binDetails.BinDetailsActivity">
+        <activity android:name=".controllers.activities.BinDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.MainActivity" />
         </activity>
-        <activity android:name=".controllers.activities.addCleanEvent.AddCleanEventActivity">
+        <activity android:name=".controllers.activities.AddCleanEventActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.MainActivity" />
         </activity>
-        <activity android:name=".controllers.activities.cleanEventDetails.CleanEventDetailsActivity">
+        <activity android:name=".controllers.activities.CleanEventDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controllers.activities.MainActivity" />

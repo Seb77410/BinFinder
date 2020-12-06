@@ -9,5 +9,4 @@ data class Bin(var binId : String? = "",
                var addBy_userID : String = "",
                var addBy_userName: String = "",
                var like: Int = 0,
-               var dislike: Int = 0
 )

@@ -17,8 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.activities.binDetails.BinDetailsActivity
-import com.application.seb.binfinder.controllers.activities.cleanEventDetails.CleanEventDetailsActivity
+import com.application.seb.binfinder.controllers.activities.BinDetailsActivity
+import com.application.seb.binfinder.controllers.activities.CleanEventDetailsActivity
 import com.application.seb.binfinder.models.Bin
 import com.application.seb.binfinder.models.CleanEvent
 import com.application.seb.binfinder.repositories.BinRepository

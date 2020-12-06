@@ -5,24 +5,24 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
-private const val BIN_WASTE_COLLECTION_REFERENCE = "BinWaste"
+private const val BIN_CONTENT_COLLECTION_REFERENCE = "BinWaste"
 
 
 
-class BinWastesRepository {
+class BinContentRepository {
 
 //--------------------------------------------------------------------------------------------------
 // References
 //--------------------------------------------------------------------------------------------------
-    private fun binWastesCollection(): CollectionReference? {
-        return FirebaseFirestore.getInstance().collection(BIN_WASTE_COLLECTION_REFERENCE)
+    private fun binContentCollection(): CollectionReference? {
+        return FirebaseFirestore.getInstance().collection(BIN_CONTENT_COLLECTION_REFERENCE)
     }
 
 //--------------------------------------------------------------------------------------------------
 // Get
 //--------------------------------------------------------------------------------------------------
-    fun getBinWastesByID(binWasteId: String): Task<DocumentSnapshot> {
-        return binWastesCollection()!!.document(binWasteId).get()
+    fun getBinContentByID(binWasteId: String): Task<DocumentSnapshot> {
+        return binContentCollection()!!.document(binWasteId).get()
     }
 
 }

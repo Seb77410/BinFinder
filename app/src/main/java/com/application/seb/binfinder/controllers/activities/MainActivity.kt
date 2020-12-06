@@ -14,7 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.fragments.addBin.AddBinFragment
+import com.application.seb.binfinder.controllers.fragments.AddBinFragment
 import com.application.seb.binfinder.controllers.fragments.CleanEventFragment
 import com.application.seb.binfinder.controllers.fragments.MapFragment
 import com.application.seb.binfinder.utils.Utils

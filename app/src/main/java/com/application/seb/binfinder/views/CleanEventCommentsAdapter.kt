@@ -1,4 +1,4 @@
-package com.application.seb.binfinder.controllers.activities.cleanEventDetails
+package com.application.seb.binfinder.views
 
 import android.view.LayoutInflater
 import android.view.View

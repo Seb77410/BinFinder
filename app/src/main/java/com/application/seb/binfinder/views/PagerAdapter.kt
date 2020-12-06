@@ -1,11 +1,11 @@
-package com.application.seb.binfinder.utils
+package com.application.seb.binfinder.views
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.fragments.cleanEventList.CleanEventListFragment
+import com.application.seb.binfinder.controllers.fragments.CleanEventListFragment
 
 private const val PAGE_NUMBER = 2
 

@@ -9,8 +9,8 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.application.seb.binfinder.R
-import com.application.seb.binfinder.controllers.activities.addCleanEvent.AddCleanEventActivity
-import com.application.seb.binfinder.utils.PageAdapter
+import com.application.seb.binfinder.controllers.activities.AddCleanEventActivity
+import com.application.seb.binfinder.views.PageAdapter
 import com.google.android.material.tabs.TabLayout
 
 private const val ARG_PARAM1 = "showUserCleanEvents"
