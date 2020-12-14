@@ -117,10 +117,6 @@ class CleanEventListFragment : Fragment() {
                 }
     }
 
-//--------------------------------------------------------------------------------------------------
-// Configure View
-//--------------------------------------------------------------------------------------------------
-
 
     private fun getUserCreatedEventsAndSTartRecyclerView() {
         Log.e(TAG, "get Events by Created id")

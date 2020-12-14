@@ -118,7 +118,9 @@ class SignInActivity : AppCompatActivity() {
                                         .createUser(FirebaseAuth.getInstance().currentUser!!.uid,
                                             FirebaseAuth.getInstance().currentUser!!.displayName!!,
                                             FirebaseAuth.getInstance().currentUser?.photoUrl.toString() )!!
-                                        .addOnSuccessListener {startMainActivity()}
+                                        .addOnSuccessListener {
+                                            startMainActivity()
+                                        }
                             }
                         }
                     }
@@ -129,6 +131,10 @@ class SignInActivity : AppCompatActivity() {
                 }
     }
 
+
+//--------------------------------------------------------------------------------------------------
+// Intent
+//--------------------------------------------------------------------------------------------------
     private fun startMainActivity(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

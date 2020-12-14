@@ -1,6 +1,5 @@
 package com.application.seb.binfinder.repositories
 
-import android.net.Uri
 import com.application.seb.binfinder.models.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference

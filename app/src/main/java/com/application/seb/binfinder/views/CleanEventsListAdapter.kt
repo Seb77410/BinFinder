@@ -32,7 +32,6 @@ class CleanEventsListAdapter(private val cleanEventsList: List<CleanEvent>, priv
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CleanEventsListViewHolder {
         // create a new view
         val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_clean_event_list_item, parent, false)
-        // set the view's size, margins, paddings and layout parameters
 
         return CleanEventsListViewHolder(view)
     }

@@ -87,9 +87,7 @@ class Utils {
             val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
             val newSdf = SimpleDateFormat("dd / MM / yyyy", Locale.getDefault())
             val mDate : Date = sdf.parse((date).toString())!!
-            val formatDate = newSdf.format(mDate)
-
-            return formatDate
+            return newSdf.format(mDate)
 
         }
 

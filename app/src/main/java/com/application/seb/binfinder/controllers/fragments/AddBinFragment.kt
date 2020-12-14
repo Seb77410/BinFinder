@@ -83,6 +83,31 @@ class AddBinFragment : Fragment() {
         return rootView
     }
 
+//--------------------------------------------------------------------------------------------------
+// Camera
+//--------------------------------------------------------------------------------------------------
+
+    private fun configureImageButton(){
+        imageButton.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(context!!.packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data!!.extras!!.get(Constants.DATA) as Bitmap
+            imageButton.setImageBitmap(imageBitmap)
+            userTakePhoto = true
+        }
+    }
 
 //--------------------------------------------------------------------------------------------------
 // Configure FAB save button
@@ -151,11 +176,11 @@ class AddBinFragment : Fragment() {
     }
 
     private fun savePhotoToFirebase(imageButton: ImageButton, binId: String): UploadTask {
-        photoData = uploadBitmap(imageButton)
+        photoData = getPhotoFromImageButton(imageButton)
         return BinRepository().uploadPhoto(binId, photoData)
     }
 
-    private fun uploadBitmap(imageButton: ImageButton): ByteArray {
+    private fun getPhotoFromImageButton(imageButton: ImageButton): ByteArray {
         imageButton.isDrawingCacheEnabled = true
         imageButton.buildDrawingCache()
         val bitmap = (imageButton.drawable as BitmapDrawable).bitmap
@@ -164,31 +189,7 @@ class AddBinFragment : Fragment() {
         return baos.toByteArray()
     }
 
-//--------------------------------------------------------------------------------------------------
-// Camera
-//--------------------------------------------------------------------------------------------------
 
-    private fun configureImageButton(){
-        imageButton.setOnClickListener {
-            dispatchTakePictureIntent()
-        }
-    }
-
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(context!!.packageManager)?.also {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data!!.extras!!.get(Constants.DATA) as Bitmap
-            imageButton.setImageBitmap(imageBitmap)
-            userTakePhoto = true
-        }
-    }
 
 
 

@@ -117,6 +117,17 @@ class CleanEventDetailsActivity : AppCompatActivity() {
         configureMenu()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        return if(event.createBy_userId == FirebaseAuth.getInstance().uid){
+            menuInflater.inflate(R.menu.menu_clean_event_details, menu)
+            true
+        }
+        else {
+            false
+        }
+    }
+
     private fun configureMenu() {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -141,16 +152,7 @@ class CleanEventDetailsActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        return if(event.createBy_userId == FirebaseAuth.getInstance().uid){
-            menuInflater.inflate(R.menu.menu_clean_event_details, menu)
-            true
-        }
-        else {
-            false
-        }
-    }
+
 
     private fun showAlertDialog(){
         val dialogBuilder =  AlertDialog.Builder(this)
@@ -183,7 +185,6 @@ class CleanEventDetailsActivity : AppCompatActivity() {
                 .setNegativeButton(getString(R.string.alert_dialog_no_button)) { _: DialogInterface, _: Int ->
                     Log.d(TAG, "Alert dialog - click NO button")
                 }
-
         val dialogCard: AlertDialog = dialogBuilder.create()
         dialogCard.window!!.setGravity(Gravity.TOP)
         dialogCard.show()

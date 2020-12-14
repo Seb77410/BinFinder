@@ -109,7 +109,7 @@ class BinDetailsActivity : AppCompatActivity() {
             setDislikeButton()
             setDefaultButtonsColor()
             setAddress()
-            setBinWasteContent()
+            setBinWastes()
         }
     }
 //--------------------------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ class BinDetailsActivity : AppCompatActivity() {
 // Bin waste content
 //--------------------------------------------------------------------------------------------------
 
-    private fun setBinWasteContent(){
+    private fun setBinWastes(){
 
         BinContentRepository().getBinContentByID(bin.type).addOnSuccessListener { document ->
             val binWaste: BinContent = document.toObject(BinContent::class.java)!!

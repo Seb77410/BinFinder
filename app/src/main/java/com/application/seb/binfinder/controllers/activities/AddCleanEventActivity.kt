@@ -246,7 +246,6 @@ class AddCleanEventActivity : AppCompatActivity() {
                     addressLayout.error = getString(R.string.invalid_address)
                     Log.e(TAG, "error during convert address to latlng")}
             }
-
             override fun onFailure(call: Call<GeocodeResponse?>, t: Throwable) {Log.e(TAG, "geocode request error : " + t.message!! )}
         })
     }

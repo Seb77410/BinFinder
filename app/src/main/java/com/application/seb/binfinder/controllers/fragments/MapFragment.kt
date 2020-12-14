@@ -133,7 +133,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             // Ask for location permission
             Log.e(TAG, "Location Permission denied")
             return requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_CODE)
-
         }
         else{
             Log.d(TAG, "Location Permission allowed")
@@ -142,6 +141,29 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             googleMap!!.setOnMarkerClickListener(this)
 
             updateUserLocation(toStartAddBinFragment = false, toInitialiseView = true)
+        }
+    }
+
+//--------------------------------------------------------------------------------------------------
+// Permission ask result
+//--------------------------------------------------------------------------------------------------
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == LOCATION_PERMISSION_CODE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Location permission granted")
+                    googleMap!!.isMyLocationEnabled = true
+                    googleMap!!.uiSettings.isZoomControlsEnabled = true
+                    googleMap!!.setOnMarkerClickListener(this)
+
+                    updateUserLocation(toStartAddBinFragment = false, toInitialiseView = true)
+                }
+                else{
+                    Log.e(TAG, "Location permission denied")
+                }
+            }
         }
     }
 
@@ -170,52 +192,25 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-
 //--------------------------------------------------------------------------------------------------
-// Permission ask result
+// Default view
 //--------------------------------------------------------------------------------------------------
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == LOCATION_PERMISSION_CODE){
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Location permission granted")
-                    googleMap!!.isMyLocationEnabled = true
-                    googleMap!!.uiSettings.isZoomControlsEnabled = true
-                    googleMap!!.setOnMarkerClickListener(this)
+    private fun showSavedLocation(){
+        val binType = getArgs()
+        if(!binType.isNullOrEmpty()){getSelectedBinsList(binType)}
+        else{getSelectedBinsList(getString(R.string.household_wast))}
+    }
 
-                    updateUserLocation(toStartAddBinFragment = false, toInitialiseView = true)
-                }
-                else{
-                    Log.e(TAG, "Location permission denied")
-                }
-            }
+    private fun getArgs():String?{
+        var binType : String? = null
+        arguments?.let {
+            binType = it.getString(PARAM)
+            Log.d(TAG, " Argument $PARAM = $binType")
         }
+        return binType
     }
 
-
-//--------------------------------------------------------------------------------------------------
-// AlertDialog
-//--------------------------------------------------------------------------------------------------
-
-    private fun showAlertDialog(){
-        updateUserLocation(toStartAddBinFragment = false, toInitialiseView = false)
-        val dialogBuilder = AlertDialog.Builder(context!!)
-        dialogBuilder
-                .setTitle(getString(R.string.alert_dialog_add_bin_title))
-                .setMessage(getString(R.string.alert_dialog_add_bin_content))
-                .setPositiveButton(getString(R.string.alert_dialog_yes_button)) { _: DialogInterface, _: Int ->
-                    Log.d(TAG, "Alert dialog - click YES button")
-                    updateUserLocation(toStartAddBinFragment = true, toInitialiseView = false)
-                }
-                .setNegativeButton(getString(R.string.alert_dialog_no_button)) { _: DialogInterface, _: Int ->
-                    Log.e(TAG, "Alert dialog - click NO button")
-                }
-        val dialogCard: AlertDialog = dialogBuilder.create()
-        dialogCard.window!!.setGravity(Gravity.TOP)
-        dialogCard.show()
-    }
 
 //--------------------------------------------------------------------------------------------------
 // Configure FAB
@@ -248,10 +243,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         fabRecyclingCenter.setOnClickListener {getSelectedBinsList(getString(R.string.recycling_center))}
     }
 
-//--------------------------------------------------------------------------------------------------
-// Marker
-//--------------------------------------------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------
+// Get Bins / Event data
+//--------------------------------------------------------------------------------------------------
     private fun getSelectedBinsList(type: String){
         val binRepository = BinRepository()
 
@@ -288,7 +283,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-
+//--------------------------------------------------------------------------------------------------
+// Marker
+//--------------------------------------------------------------------------------------------------
     private fun showMarker(){
         for(location in locationsList!!){
             when(location){
@@ -313,10 +310,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                     Log.d(TAG, "showMarker() for Event id = " + location.eventId)
                 }
             }
-
-
-
-
         }
     }
 
@@ -348,23 +341,26 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         return true
     }
 
-
 //--------------------------------------------------------------------------------------------------
-// Default view
+// AlertDialog
 //--------------------------------------------------------------------------------------------------
 
-    private fun showSavedLocation(){
-        val binType = getArgs()
-        if(!binType.isNullOrEmpty()){getSelectedBinsList(binType)}
-        else{getSelectedBinsList(getString(R.string.household_wast))}
+    private fun showAlertDialog(){
+        updateUserLocation(toStartAddBinFragment = false, toInitialiseView = false)
+        val dialogBuilder = AlertDialog.Builder(context!!)
+        dialogBuilder
+                .setTitle(getString(R.string.alert_dialog_add_bin_title))
+                .setMessage(getString(R.string.alert_dialog_add_bin_content))
+                .setPositiveButton(getString(R.string.alert_dialog_yes_button)) { _: DialogInterface, _: Int ->
+                    Log.d(TAG, "Alert dialog - click YES button")
+                    updateUserLocation(toStartAddBinFragment = true, toInitialiseView = false)
+                }
+                .setNegativeButton(getString(R.string.alert_dialog_no_button)) { _: DialogInterface, _: Int ->
+                    Log.e(TAG, "Alert dialog - click NO button")
+                }
+        val dialogCard: AlertDialog = dialogBuilder.create()
+        dialogCard.window!!.setGravity(Gravity.TOP)
+        dialogCard.show()
     }
 
-    private fun getArgs():String?{
-    var binType : String? = null
-        arguments?.let {
-            binType = it.getString(PARAM)
-            Log.d(TAG, " Argument $PARAM = $binType")
-        }
-        return binType
-    }
 }

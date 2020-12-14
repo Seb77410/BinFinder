@@ -56,8 +56,8 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         drawerUserEmail= navigationView.getHeaderView(0).findViewById(R.id.nav_header_user_email)
 
 
-        configureMapButton()
         showMapFragment(null)
+        configureMapButton()
         configureDrawerLayout()
         onclickMenu()
     }
@@ -109,8 +109,24 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
 
 
 //--------------------------------------------------------------------------------------------------
-// For Navigation Drawer
+// Navigation Drawer
 //--------------------------------------------------------------------------------------------------
+    /**
+     * This method configure Drawer Layout and add burger button on the left of toolbar
+     */
+    private fun configureDrawerLayout() {
+        // Glue drawer menu to MainActivity toolbar
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, appBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        // Add listener to the menu drawer
+        drawerLayout.addDrawerListener(toggle)
+        // Add animation on drawer menu button when Open/close
+        toggle.syncState()
+        // Allow user tu click on Menu drawer item button
+        navigationView.setNavigationItemSelectedListener(this)
+        // Show user data
+        setDrawerUserInfo()
+    }
+
     private fun setDrawerUserInfo() {
     // Set user name
     val userName = FirebaseAuth.getInstance().currentUser!!.displayName
@@ -135,22 +151,7 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         return uri?.toString() ?: ContextCompat.getDrawable(this, R.drawable.no_image)
     }
 
-    /**
-     * This method configure Drawer Layout and add burger button on the left of toolbar
-     */
-    private fun configureDrawerLayout() {
-        // Glue drawer menu to MainActivity toolbar
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, appBar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        // Add listener to the menu drawer
-        drawerLayout.addDrawerListener(toggle)
-        // Add animation on drawer menu button when Open/close
-        toggle.syncState()
-        // Allow user tu click on Menu drawer item button
-        navigationView.setNavigationItemSelectedListener(this)
-        // Show user data
-        setDrawerUserInfo()
 
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
