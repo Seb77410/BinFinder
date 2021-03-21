@@ -25,27 +25,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:visibility="visible"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 >
 
                 <TextView
                     android:id="@+id/line1"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@android:color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/clean_event_list_fragment_create_list_title"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
                 <TextView
                     android:id="@+id/clean_event_list_fragment_create_list_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/create"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
                     android:textStyle="italic"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,10 +58,10 @@
                 <TextView
                     android:id="@+id/line2"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@android:color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/clean_event_list_fragment_create_list_title"
@@ -73,11 +76,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clean_event_list_fragment_create_list_title_container"
-                android:layout_marginTop="10dp">
+                >
 
             </androidx.recyclerview.widget.RecyclerView>
 
-
+            <TextView
+                android:id="@+id/bottomView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/clean_event_lis_fragment_recyclerView"
+                app:layout_constraintTop_toBottomOf="@id/clean_event_lis_fragment_recyclerView"
+                android:layout_marginTop="10dp"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clean_event_list_fragment_participate_list_title_container"
@@ -85,18 +96,19 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clean_event_lis_fragment_recyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/bottomView1"
                 android:layout_marginTop="20dp"
                 android:visibility="visible"
+                android:layout_marginBottom="10dp"
                 >
 
                 <TextView
                     android:id="@+id/line3"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@android:color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/clean_event_details_activity_details_title"
                     app:layout_constraintStart_toStartOf="parent"
@@ -107,8 +119,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/participate"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
                     android:textStyle="italic"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -118,10 +130,10 @@
                 <TextView
                     android:id="@+id/line4"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="3dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@android:color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/clean_event_details_activity_details_title"
@@ -136,14 +148,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clean_event_list_fragment_participate_list_title_container"
-                app:layout_constraintBottom_toTopOf="@+id/bottomView"
+                app:layout_constraintBottom_toTopOf="@+id/bottomView2"
                 android:visibility="visible"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 />
 
             <TextView
-                android:id="@+id/bottomView"
+                android:id="@+id/bottomView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

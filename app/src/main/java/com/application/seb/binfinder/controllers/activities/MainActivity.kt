@@ -196,5 +196,14 @@ class MainActivity : AppCompatActivity(), MapFragment.OnFragmentInteractionListe
         }
     }
 
+//--------------------------------------------------------------------------------------------------
+// Back Press
+//--------------------------------------------------------------------------------------------------
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        FirebaseAuth.getInstance().signOut()
+        intent = Intent(applicationContext, SignInActivity::class.java)
+        startActivity(intent)
+    }
 }

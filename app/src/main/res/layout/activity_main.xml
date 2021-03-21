@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@color/colorPrimaryDark"
                 app:menu="@menu/menu_main"
                 />
 
@@ -49,9 +49,11 @@
                 android:id="@+id/activity_main_map_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:backgroundTint="@color/colorPrimary"
+                app:backgroundTint="@android:color/black"
                 app:layout_anchor="@id/bottomAppBar"
-                app:srcCompat="@drawable/ic_map" />
+                app:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_location"
+                />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -81,9 +81,7 @@ class CleanEventListFragment : Fragment() {
         }
         else if(!isForSoonCleansEvents && isForUserCleansEvents){
             Log.e(TAG, "is for User clean Events")
-            createTitleContainer.visibility = View.VISIBLE
-            userTitleContainer.visibility = View.VISIBLE
-            recyclerView2.visibility = View.VISIBLE
+
             getUserCreatedEventsAndSTartRecyclerView()
             getParticipateCleanEventsAngConfigureRecyclerView()
         }
@@ -126,7 +124,12 @@ class CleanEventListFragment : Fragment() {
                     val results : MutableList<CleanEvent> = mutableListOf()
                     for(cleanEvent in snapshot.documents) {results.add(cleanEvent.toObject(CleanEvent::class.java)!!)}
                     Log.e(TAG, "create result size = ${results.size}")
-                    configureRecyclerView(results, recyclerView)
+                    if (results.size >= 1){
+                        createTitleContainer.visibility = View.VISIBLE
+                        configureRecyclerView(results, recyclerView)
+                    }else{
+                        createTitleContainer.visibility = View.GONE
+                    }
                 }
     }
 
@@ -137,7 +140,14 @@ class CleanEventListFragment : Fragment() {
                     val results : MutableList<CleanEvent> = mutableListOf()
                     for(cleanEvent in snapshot.documents) {results.add(cleanEvent.toObject(CleanEvent::class.java)!!)}
                     Log.e(TAG, "participate result size = ${results.size}")
-                    configureRecyclerView(results, recyclerView2)
+                    if(results.size >= 1){
+                        userTitleContainer.visibility = View.VISIBLE
+                        recyclerView2.visibility = View.VISIBLE
+                        configureRecyclerView(results, recyclerView2)
+                    }else{
+                        userTitleContainer.visibility = View.GONE
+                        recyclerView2.visibility = View.GONE
+                    }
                 }
     }
 }

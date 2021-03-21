@@ -38,65 +38,76 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/map_fragment_fab_menu"
-            app:layout_constraintEnd_toEndOf="@+id/map_fragment_fab_menu"
             app:layout_constraintStart_toStartOf="@+id/map_fragment_fab_menu"
             android:visibility="gone"
             >
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_glass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_broken_glass" />
+                app:icon="@drawable/ic_broken_glass"
+                android:text="Glass"
+                />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_household_waste"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_household_waste" />
+                app:icon="@drawable/ic_household_waste"
+                android:text="Household waste"
+                />
 
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_green_waste"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_leaf" />
+                app:icon="@drawable/ic_leaf"
+                android:text="Green waste"
+                />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_plastic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_plastic_svg" />
+                app:icon="@drawable/ic_plastic_svg"
+                android:text="Plastic bin"
+                />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_recycling_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_recycling_center" />
+                app:icon="@drawable/ic_recycling_center"
+                android:text="Recycling center"
+                />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/map_fragment_fab_clean_events"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
                 app:fabCustomSize="45dp"
-                app:srcCompat="@drawable/ic_clean_event" />
+                app:icon="@drawable/ic_clean_event"
+                android:text="Clean events"
+                />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -109,6 +120,7 @@
             app:layout_constraintStart_toStartOf="@+id/map_fragment_fab_menu"
             app:srcCompat="@drawable/ic_add_black_24"
             android:layout_marginBottom="10dp"
+            android:text="Add"
             />
 
 

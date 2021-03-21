@@ -7,10 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.GeoPoint
 import java.util.*
@@ -51,12 +49,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var googleMap : GoogleMap? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var fabMenu: FloatingActionButton
-    private lateinit var fabGlass: FloatingActionButton
-    private lateinit var fabHousehold: FloatingActionButton
-    private lateinit var fabGreen: FloatingActionButton
-    private lateinit var fabPlastic: FloatingActionButton
-    private lateinit var fabRecyclingCenter: FloatingActionButton
-    private lateinit var fabCleanEvent: FloatingActionButton
+    private lateinit var fabGlass: ExtendedFloatingActionButton
+    private lateinit var fabHousehold: ExtendedFloatingActionButton
+    private lateinit var fabGreen: ExtendedFloatingActionButton
+    private lateinit var fabPlastic: ExtendedFloatingActionButton
+    private lateinit var fabRecyclingCenter: ExtendedFloatingActionButton
+    private lateinit var fabCleanEvent: ExtendedFloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var fabContainer : LinearLayout
     private lateinit var constraintLayout : ConstraintLayout
@@ -91,11 +89,23 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         fabMenu = rootView.findViewById(R.id.map_fragment_fab_menu)
         fabGlass = rootView.findViewById(R.id.map_fragment_fab_glass)
+        fabGlass.shrink()
+        touchListener(fabGlass)
         fabHousehold = rootView.findViewById(R.id.map_fragment_fab_household_waste)
+        fabHousehold.shrink()
+        touchListener(fabHousehold)
         fabGreen = rootView.findViewById(R.id.map_fragment_fab_green_waste)
+        fabGreen.shrink()
+        touchListener(fabGreen)
         fabPlastic = rootView.findViewById(R.id.map_fragment_fab_plastic)
+        fabPlastic.shrink()
+        touchListener(fabPlastic)
         fabRecyclingCenter = rootView.findViewById(R.id.map_fragment_fab_recycling_center)
+        fabRecyclingCenter.shrink()
+        touchListener(fabRecyclingCenter)
         fabCleanEvent = rootView.findViewById(R.id.map_fragment_fab_clean_events)
+        fabCleanEvent.shrink()
+        touchListener(fabCleanEvent)
         fabContainer = rootView.findViewById(R.id.map_fragment_fab_container)
         fabAdd = rootView.findViewById(R.id.map_fragment_fab_add)
         constraintLayout = rootView.findViewById(R.id.map_fragment_constraint_layout)
@@ -231,7 +241,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     private fun configureFabAdd(){
-        fabAdd.setOnClickListener {showAlertDialog()}
+        fabAdd.setOnClickListener {
+            showAlertDialog()
+        }
     }
 
     private fun configureBinsFabClick(){
@@ -250,7 +262,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun getSelectedBinsList(type: String){
         val binRepository = BinRepository()
 
-        binRepository.getBinByDistance(userLocation.latitude, userLocation.longitude ,type).addSnapshotListener { _, mutableList, mutableList2 ->
+        binRepository.getBinByDistance(userLocation.latitude, userLocation.longitude, type).addSnapshotListener { _, mutableList, mutableList2 ->
             Log.d(TAG, "Bins found = ${mutableList.size} and list2 = ${mutableList2.size} for type = $type")
             // Clear data
             locationsList!!.clear()
@@ -291,17 +303,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             when(location){
                 is Bin -> {
                     // Set marker options
-                    val latLng = LatLng(location.geoLocation!!.latitude ,location.geoLocation!!.longitude)
-                    val markerOptions = MarkerOptions().position(latLng)
+                    val latLng = LatLng(location.geoLocation!!.latitude, location.geoLocation!!.longitude)
+                    val markerOptions = MarkerOptions().position(latLng).title(location.type)
                     val mMarker: Marker = googleMap!!.addMarker(markerOptions)
-                    mMarker.title = location.type
                     mMarker.tag = location.binId
                     markersList!!.add(mMarker)
                     Log.d(TAG, "showMarker() for Bin id = " + location.binId)
                 }
                 is CleanEvent -> {
                     // Set marker options
-                    val latLng = LatLng(location.geoLocation!!.latitude ,location.geoLocation!!.longitude)
+                    val latLng = LatLng(location.geoLocation!!.latitude, location.geoLocation!!.longitude)
                     val markerOptions = MarkerOptions().position(latLng)
                     val mMarker: Marker = googleMap!!.addMarker(markerOptions)
                     mMarker.title = "Clean Event"
@@ -361,6 +372,22 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val dialogCard: AlertDialog = dialogBuilder.create()
         dialogCard.window!!.setGravity(Gravity.TOP)
         dialogCard.show()
+    }
+
+    private fun touchListener(fab: ExtendedFloatingActionButton){
+        fab.setOnTouchListener { v, event ->
+
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    fab.extend()
+                    v.performClick()
+                }
+                MotionEvent.ACTION_UP ->{
+                    fab.shrink()
+                }
+            }
+            true
+        }
     }
 
 }
